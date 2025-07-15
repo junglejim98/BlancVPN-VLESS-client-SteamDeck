@@ -7,7 +7,7 @@ interface Props {
 	onSubmit: (url: string) => void;
 }
 
-export default function СonfigReader({onSubmit}: Props) {
+export default function UrlInput({onSubmit}: Props) {
 	const [input, setInput] = useState('');
 
 	const handleSubmit = async (value: string) => {
