@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Box, Text} from 'ink';
 import SelectInput from 'ink-select-input';
+import {substringAfter} from './parser.js';
 
 interface Props {
 	url: string;
@@ -20,12 +21,14 @@ export default function CountrySelector({url, onSelect}: Props) {
 				.map(s => s.trim())
 				.filter(s => s !== '');
 
-			setItems(list.map(str => ({label: str, value: str})));
+			setItems(
+				list.map(str => ({label: substringAfter(str, '#'), value: str})),
+			);
 			setLoading(false);
 		})();
 	}, [url]);
 	const _onSelect = async (item: SelectItem) => {
-		onSelect(item.value); // только теперь можно выходить
+		onSelect(item.value);
 	};
 
 	if (loading) {

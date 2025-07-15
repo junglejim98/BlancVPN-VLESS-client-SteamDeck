@@ -15,7 +15,7 @@
 			"settings": {
 				"vnext": [
 					{
-						"address": "hun-bud-01.fromblancwithlove.com",
+						"address": "cdg-1.fromblancwithlove.com",
 						"port": 8443,
 						"users": [
 							{
@@ -48,7 +48,7 @@
 				"type": "field",
 				"outboundTag": "direct",
 				"domain": [
-					"6351a33c-cb38-4e5b-b189-5a2b926baaf4@hun-bud-01.fromblancwithlove.com"
+					"6351a33c-cb38-4e5b-b189-5a2b926baaf4@cdg-1.fromblancwithlove.com"
 				]
 			}
 		]

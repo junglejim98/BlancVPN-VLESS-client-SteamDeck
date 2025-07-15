@@ -10,3 +10,11 @@ export default function getBetween(
 	if (end === -1) return '';
 	return str.substring(from, end);
 }
+
+export function substringAfter(str: string, char: string) {
+	const index = str.indexOf(char);
+	if (index === -1) {
+		return '';
+	}
+	return str.substring(index + 1);
+}
