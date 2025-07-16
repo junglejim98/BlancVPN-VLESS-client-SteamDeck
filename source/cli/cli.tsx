@@ -3,7 +3,7 @@ import {render, Box, Text} from 'ink';
 import SelectInput from 'ink-select-input';
 import UrlInput from './configReader.js';
 import CountrySelector from './countrySelector.js';
-import decoder from './decoder.js';
+import decoder from '../utils/decoder.js';
 
 type Step = 'menu' | 'enterUrl' | 'showList' | 'buildConfig';
 const menuItems = [

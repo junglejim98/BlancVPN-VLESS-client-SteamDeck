@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Box, Text} from 'ink';
 import TextInput from 'ink-text-input';
-import base64UrlDownloader from './downloader.js';
+import base64UrlDownloader from '../utils/downloader.js';
 
 interface Props {
 	onSubmit: (url: string) => void;

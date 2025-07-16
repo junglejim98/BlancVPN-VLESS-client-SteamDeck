@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Box, Text} from 'ink';
 import SelectInput from 'ink-select-input';
-import {substringAfter} from './parser.js';
+import {substringAfter} from '../utils/parser.js';
 
 interface Props {
 	url: string;
