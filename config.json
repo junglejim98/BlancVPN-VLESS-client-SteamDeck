@@ -1,56 +1,58 @@
 {
-	"inbounds": [
-		{
-			"port": 1080,
-			"listen": "127.0.0.1",
-			"protocol": "socks",
-			"settings": {
-				"udp": true
-			}
-		}
-	],
-	"outbounds": [
-		{
-			"protocol": "vless",
-			"settings": {
-				"vnext": [
-					{
-						"address": "cdg-1.fromblancwithlove.com",
-						"port": 8443,
-						"users": [
-							{
-								"id": "6351a33c-cb38-4e5b-b189-5a2b926baaf4",
-								"encryption": "none"
-							}
-						]
-					}
-				]
-			},
-			"streamSettings": {
-				"network": "tcp",
-				"security": "tls"
-			}
-		},
-		{
-			"protocol": "freedom",
-			"tag": "direct"
-		}
-	],
-	"routing": {
-		"domainStrategy": "AsIs",
-		"rules": [
-			{
-				"type": "field",
-				"domain": ["geosite:geolocation-!cn"],
-				"outboundTag": "direct"
-			},
-			{
-				"type": "field",
-				"outboundTag": "direct",
-				"domain": [
-					"6351a33c-cb38-4e5b-b189-5a2b926baaf4@cdg-1.fromblancwithlove.com"
-				]
-			}
-		]
-	}
+  "inbounds": [
+    {
+      "port": 1080,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "settings": {
+        "udp": true
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "hun-bud-01.fromblancwithlove.com",
+            "port": 8443,
+            "users": [
+              {
+                "id": "6351a33c-cb38-4e5b-b189-5a2b926baaf4",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "tls"
+      }
+    },
+    {
+      "protocol": "freedom",
+      "tag": "direct"
+    }
+  ],
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "type": "field",
+        "domain": [
+          "geosite:geolocation-!cn"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "outboundTag": "direct",
+        "domain": [
+          "6351a33c-cb38-4e5b-b189-5a2b926baaf4@hun-bud-01.fromblancwithlove.com"
+        ]
+      }
+    ]
+  }
 }

@@ -3,6 +3,7 @@ import {Box, Text} from 'ink';
 import SelectInput from 'ink-select-input';
 import {substringAfter} from '../utils/parser.js';
 
+
 interface Props {
 	url: string;
 	onSelect: (value: string) => void;
@@ -28,7 +29,8 @@ export default function CountrySelector({url, onSelect}: Props) {
 		})();
 	}, [url]);
 	const _onSelect = async (item: SelectItem) => {
-		onSelect(item.value);
+		const DNS: string = item.value;
+		onSelect(DNS);
 	};
 
 	if (loading) {

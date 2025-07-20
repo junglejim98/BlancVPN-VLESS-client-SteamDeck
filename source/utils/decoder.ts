@@ -62,7 +62,7 @@ export default async function decoder(stringValue: string) {
 	const confJSON = JSON.stringify(conf, null, 2);
 
 	try {
-		await writeFile('config.json', confJSON, 'utf-8');
+		await writeFile('~/.config/v2ray/config.json', confJSON, 'utf-8');
 		console.log('Данные успешно записаны в файл data.json');
 	} catch (err) {
 		console.error(err);
