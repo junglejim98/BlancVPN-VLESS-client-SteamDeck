@@ -38,7 +38,7 @@
 
 - **Steam Deck** (или любая другая Linux-машина)  
 - **Node.js** версии 16 и выше  
-- Установленные утилиты: `wget`, `unzip`, `tun2socks`  
+- Установленные утилиты: `wget`, `unzip`
 - Права `sudo` или root-доступ для записи конфигурации и управления интерфейсом  
 
 ---
@@ -56,14 +56,13 @@
    ```
 ## Использование
 
-Запустите CLI через npm-скрипт:
+Запустите CLI:
 ```bash
-npm start
+cd ./BlankVPN-VLESS-Client/source
+npm run build
+node ../dist/cli/cli.js
 ```
-Или напрямую:
-```bash
-node cli.js
-```
+
 Дальше просто выбираете пункт меню стрелками и Enter.
 
 ---
@@ -82,18 +81,24 @@ node cli.js
 	- decoder.ts — формирует config.json из выбранной строки VLESS.
 
 	- lookup.ts — преобразует доменное имя в IP перед подключением.
+ 
+ 	- downloader.ts - скачивает и дешефрует BASE64 строку с конфигами.
+
+  	- getSheellPath.ts - резолвит путь к SH скриптам для правильного копирования в dist и последующего к ним обращения.
+  	
+   	- parser.ts - набор утилит для работы со строками (*getBetween*, *substringAfter*)  
 
 - Поток работы
 
-	1. Вводите URL со списком конфигов (BASE64-строки).
+	1. Скачивание компонентов v2Ray и tun2socks при необходимости.
 
-	2. configReader.tsx и countrySelector.tsx разбирают и показывают их по странам.
+  	2. Вводите URL со списком конфигов (BASE64-строки).
 
-	3. После выбора — decoder записывает готовый ~/.config/v2ray/config.json.
+	3. configReader.tsx и countrySelector.tsx разбирают и показывают их по странам.
 
-	4. Компоненты скачивают v2Ray и tun2socks при необходимости.
+	4. После выбора — decoder записывает готовый ~/.config/v2ray/config.json.
 
-  	5. Скрипты start-vpn.sh/stop-vpn.sh поднимают или опускают интерфейс tun0.
+  	6. Скрипты start-vpn.sh/stop-vpn.sh поднимают или опускают интерфейс tun0.
 
 ---
 
