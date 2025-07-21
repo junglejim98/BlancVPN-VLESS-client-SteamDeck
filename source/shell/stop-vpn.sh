@@ -1,5 +1,3 @@
-VPN_SERVER_IP="185.130.184.58"
-
 echo "[1] Удаление маршрутов..."
 sudo ip route del 0.0.0.0/1 dev tun0
 sudo ip route del 128.0.0.0/1 dev tun0

@@ -1,8 +1,16 @@
 import {writeFile} from 'node:fs/promises';
+import path from 'path';
+import os from 'os';
 import getBetween from './parser.js';
 
 export default async function decoder(stringValue: string) {
 	console.log('decoder получил:', stringValue);
+
+	const vlessConfig = {
+		VLESS_CONFIG: stringValue,
+	};
+
+	writeFile('vlessConfig.json', JSON.stringify(vlessConfig, null, 2), 'utf-8');
 
 	const conf = {
 		inbounds: [
@@ -60,9 +68,10 @@ export default async function decoder(stringValue: string) {
 	};
 
 	const confJSON = JSON.stringify(conf, null, 2);
+	const configPath = path.join(os.homedir(), '.config', 'v2ray', 'config.json');
 
 	try {
-		await writeFile('~/.config/v2ray/config.json', confJSON, 'utf-8');
+		await writeFile(configPath, confJSON, 'utf-8');
 		console.log('Данные успешно записаны в файл data.json');
 	} catch (err) {
 		console.error(err);

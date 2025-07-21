@@ -1,5 +1,5 @@
-VPN_SERVER_IP="185.130.184.58"
 GATEWAY=$(ip route | grep default | awk '{print $3}')
+
 
 echo "[0] Удаление старого tun0 (если был)..."
 sudo ip link delete tun0 2>/dev/null
