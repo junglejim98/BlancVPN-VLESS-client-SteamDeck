@@ -3,16 +3,19 @@ import {render, Box, Text} from 'ink';
 import SelectInput from 'ink-select-input';
 import UrlInput from './configReader.js';
 import CountrySelector from './countrySelector.js';
-import DownloadV2Ray from './shell.js';
+import ScriptRunner from './shell.js';
 import decoder from '../utils/decoder.js';
 import { getShellPath } from '../utils/getSheellPath.js';
 import getBetween from '../utils/parser.js';
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
 
 
-type Step = 'menu' | 'enterUrl' | 'showList' | 'buildConfig' | 'v2RayDownload' | 'tun2SocksDonload' | 'start-vpn' | 'stop-vpn';
+type Step = 'menu' | 'enterUrl' | 'showList' | 'buildConfig' | 'v2RayDownload' | 'tun2SocksDownload' | 'start-vpn' | 'stop-vpn';
 const menuItems = [
 	{label: '1. Скачать v2Ray', value: 'v2RayDownload'},
-	{label: '2. Скачать tun2Socks', value: 'tun2SocksDonload'},
+	{label: '2. Скачать tun2Socks', value: 'tun2SocksDownload'},
 	{label: '3. Ввести URL', value: 'enterUrl'},
 	{label: '4. Показать список', value: 'showList'},
 	{label: '5. Создать config.json', value: 'buildConfig'},
@@ -26,6 +29,8 @@ const App = () => {
 	const [utf8, setUtf8] = useState<string | null>(null);
 	const [selection, setSelection] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
+	const configPathV2ray = path.join(os.homedir(), 'v2ray');
+	const configPathTun2socks = path.join(os.homedir(), 'tun2socks');
 
 	if (step === 'menu') {
 		return (
@@ -40,14 +45,24 @@ const App = () => {
 						}
 
 						if (item.value === 'v2RayDownload') {
+							if(fs.existsSync(configPathV2ray))
+							{
+								setError('v2ray already exists')
+								return;
+							}
 							setError(null);
 							setStep('v2RayDownload');
 							return;
 						}
 
-						if (item.value === 'tun2SocksDonload') {
+						if (item.value === 'tun2SocksDownload') {
+							if(fs.existsSync(configPathTun2socks))
+							{
+								setError('v2ray already exists')
+								return;
+							}
 							setError(null);
-							setStep('tun2SocksDonload');
+							setStep('tun2SocksDownload');
 							return;
 						}
 
@@ -78,7 +93,7 @@ const App = () => {
 						}
 
 						if (item.value === 'start-vpn') {
-							if (!selection) {
+							if (!fs.existsSync('vlessConfig.json')){
 								setError('Сначала выберите строку (пункт 4)');
 								return;
 							}
@@ -88,7 +103,7 @@ const App = () => {
 						}
 
 						if (item.value === 'stop-vpn') {
-							if (!selection) {
+							if (!fs.existsSync('vlessConfig.json')){
 								setError('Сначала выберите строку (пункт 4)');
 								return;
 							}
@@ -104,17 +119,17 @@ const App = () => {
 
 	if (step === 'v2RayDownload') {
 		return (
-			<DownloadV2Ray
+			<ScriptRunner
 				command={`sh ${getShellPath('v2rayDownload.sh')}`}
 				onDone={() => setStep('menu')}
 			/>
 		);
 	}
 
-	if (step === 'tun2SocksDonload') {
+	if (step === 'tun2SocksDownload') {
 		return (
-			<DownloadV2Ray
-				command={`sh ${getShellPath('tun2SocksDonload.sh')}`}
+			<ScriptRunner
+				command={`sh ${getShellPath('tun2SocksDownload.sh')}`}
 				onDone={() => setStep('menu')}
 			/>
 		);
@@ -158,20 +173,25 @@ const App = () => {
 	}
 
 		if (step === 'start-vpn') {
+			const raw = fs.readFileSync('vlessConfig.json', 'utf-8');
+			const DNS = JSON.parse(raw);
+			console.log(DNS.VLESS_CONFIG);
 		return (
-			<DownloadV2Ray
+			<ScriptRunner
 				command={`sh ${getShellPath('start-vpn.sh')}`}
-				dnsHost={getBetween(selection!, '@', ':')}
+				dnsHost={getBetween(DNS.VLESS_CONFIG!, '@', ':')}
 				onDone={() => setStep('menu')}
 			/>
 		);
 	}
 
 		if (step === 'stop-vpn') {
+			const raw = fs.readFileSync('vlessConfig.json', 'utf-8');
+			const DNS = JSON.parse(raw);
 		return (
-			<DownloadV2Ray
+			<ScriptRunner
 				command={`sh ${getShellPath('stop-vpn.sh')}`}
-				dnsHost={getBetween(selection!, '@', ':')}
+				dnsHost={getBetween(DNS.VLESS_CONFIG!, '@', ':')}
 				onDone={() => setStep('menu')}
 			/>
 		);
