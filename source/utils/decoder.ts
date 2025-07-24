@@ -1,7 +1,8 @@
-import {writeFile} from 'node:fs/promises';
+import {writeFile, appendFile} from 'node:fs/promises';
 import path from 'path';
 import os from 'os';
 import getBetween from './parser.js';
+import fs from 'fs';
 
 export default async function decoder(stringValue: string) {
 	console.log('decoder получил:', stringValue);
@@ -10,7 +11,11 @@ export default async function decoder(stringValue: string) {
 		VLESS_CONFIG: stringValue,
 	};
 
+	if(!fs.existsSync('./vlessConfig.json')){
 	writeFile('vlessConfig.json', JSON.stringify(vlessConfig, null, 2), 'utf-8');
+	} else {
+	appendFile('vlessConfig.json', JSON.stringify(vlessConfig, null, 2), 'utf-8');
+	}
 
 	const conf = {
 		inbounds: [
