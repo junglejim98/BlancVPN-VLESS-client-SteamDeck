@@ -8,9 +8,10 @@
 		"node": ">=16"
 	},
 	"scripts": {
-		"build": "tsc && cp -r source/shell dist/shell",
+		"build": "tsc && cp -r ./source/shell ./dist/shell",
 		"dev": "tsc --watch",
-		"test": "prettier --check . && xo && ava"
+		"test": "prettier --check . && xo && ava",
+		"format": "prettier --write ."
 	},
 	"files": [
 		"dist"

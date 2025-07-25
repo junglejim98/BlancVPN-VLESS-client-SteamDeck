@@ -5,14 +5,22 @@ import UrlInput from './configReader.js';
 import CountrySelector from './countrySelector.js';
 import ScriptRunner from './shell.js';
 import decoder from '../utils/decoder.js';
-import { getShellPath } from '../utils/getSheellPath.js';
-import getBetween from '../utils/parser.js';
+import {getShellPath} from '../utils/getSheellPath.js';
+import getBetween, {substringAfter} from '../utils/parser.js';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import {readConfig} from '../utils/jsonChecker.js';
 
-
-type Step = 'menu' | 'enterUrl' | 'showList' | 'buildConfig' | 'v2RayDownload' | 'tun2SocksDownload' | 'start-vpn' | 'stop-vpn';
+type Step =
+	| 'menu'
+	| 'enterUrl'
+	| 'showList'
+	| 'buildConfig'
+	| 'v2RayDownload'
+	| 'tun2SocksDownload'
+	| 'start-vpn'
+	| 'stop-vpn';
 const menuItems = [
 	{label: '1. Скачать v2Ray', value: 'v2RayDownload'},
 	{label: '2. Скачать tun2Socks', value: 'tun2SocksDownload'},
@@ -26,16 +34,39 @@ const menuItems = [
 
 const App = () => {
 	const [step, setStep] = useState<Step>('menu');
-	const [utf8, setUtf8] = useState<string | null>(null);
-	const [selection, setSelection] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const configPathV2ray = path.join(os.homedir(), 'v2ray');
 	const configPathTun2socks = path.join(os.homedir(), 'tun2socks');
+	const config = readConfig();
 
 	if (step === 'menu') {
+		let vlessUrlStatus = '⚠️ URL не найден';
+		let configStatus = '⚠️ Конфигурация отсутствует';
+		let colorURL = 'red';
+		let colorVLESS = 'red';
+
+		if (config.VLESS_URL) {
+			try {
+				if (config.VLESS_URL) {
+					vlessUrlStatus = '🌐 VLESS URL указан.';
+					colorURL = 'green';
+				}
+				if (config.VLESS_CONFIG) {
+					configStatus =
+						'📄 Конфигурация загружена. ' +
+						substringAfter(config.VLESS_CONFIG, '#');
+					colorVLESS = 'green';
+				}
+			} catch (e) {
+				console.error('Ошибка чтения vlessConfig.json:', e);
+			}
+		}
+
 		return (
 			<Box flexDirection="column">
 				{error && <Text color="red">{error}</Text>}
+				<Text color={colorURL}>{vlessUrlStatus}</Text>
+				<Text color={colorVLESS}>{configStatus}</Text>
 				<Text>Выберите действие:</Text>
 				<SelectInput
 					items={menuItems}
@@ -45,9 +76,8 @@ const App = () => {
 						}
 
 						if (item.value === 'v2RayDownload') {
-							if(fs.existsSync(configPathV2ray))
-							{
-								setError('v2ray already exists')
+							if (fs.existsSync(configPathV2ray)) {
+								setError('v2ray уже скачан');
 								return;
 							}
 							setError(null);
@@ -56,9 +86,8 @@ const App = () => {
 						}
 
 						if (item.value === 'tun2SocksDownload') {
-							if(fs.existsSync(configPathTun2socks))
-							{
-								setError('v2ray already exists')
+							if (fs.existsSync(configPathTun2socks)) {
+								setError('tun2Socks уже скачан');
 								return;
 							}
 							setError(null);
@@ -73,7 +102,7 @@ const App = () => {
 						}
 
 						if (item.value === 'showList') {
-							if (!utf8) {
+							if (!config.VLESS_URL) {
 								setError('Сначала введите URL (пункт 3)');
 								return;
 							}
@@ -83,8 +112,8 @@ const App = () => {
 						}
 
 						if (item.value === 'buildConfig') {
-							if (!selection) {
-								setError('Сначала выберите строку (пункт 4)');
+							if (!config.VLESS_CONFIG) {
+								setError('Сначала выберите страну (пункт 4)');
 								return;
 							}
 							setError(null);
@@ -93,8 +122,8 @@ const App = () => {
 						}
 
 						if (item.value === 'start-vpn') {
-							if (!fs.existsSync('vlessConfig.json')){
-								setError('Сначала выберите строку (пункт 4)');
+							if (!config.VLESS_URL) {
+								setError('Сначала выберите страну (пункт 4)');
 								return;
 							}
 							setError(null);
@@ -103,7 +132,7 @@ const App = () => {
 						}
 
 						if (item.value === 'stop-vpn') {
-							if (!fs.existsSync('vlessConfig.json')){
+							if (!config.VLESS_URL) {
 								setError('Сначала выберите строку (пункт 4)');
 								return;
 							}
@@ -138,8 +167,7 @@ const App = () => {
 	if (step === 'enterUrl') {
 		return (
 			<UrlInput
-				onSubmit={(data: string) => {
-					setUtf8(data);
+				onSubmit={() => {
 					setStep('menu');
 				}}
 			/>
@@ -149,9 +177,8 @@ const App = () => {
 	if (step === 'showList') {
 		return (
 			<CountrySelector
-				url={utf8!}
-				onSelect={(val: string) => {
-					setSelection(val);
+				url={config.VLESS_URL!}
+				onSelect={() => {
 					setStep('menu');
 				}}
 			/>
@@ -159,7 +186,7 @@ const App = () => {
 	}
 
 	if (step === 'buildConfig') {
-		decoder(selection!)
+		decoder(config.VLESS_CONFIG!)
 			.then(() => {
 				console.log('✅ config.json создан');
 				setStep('menu');
@@ -172,10 +199,10 @@ const App = () => {
 		return <Text>Генерирую config.json…</Text>;
 	}
 
-		if (step === 'start-vpn') {
-			const raw = fs.readFileSync('vlessConfig.json', 'utf-8');
-			const DNS = JSON.parse(raw);
-			console.log(DNS.VLESS_CONFIG);
+	if (step === 'start-vpn') {
+		const raw = fs.readFileSync('vlessConfig.json', 'utf-8');
+		const DNS = JSON.parse(raw);
+		console.log(DNS.VLESS_CONFIG);
 		return (
 			<ScriptRunner
 				command={`sh ${getShellPath('start-vpn.sh')}`}
@@ -185,9 +212,9 @@ const App = () => {
 		);
 	}
 
-		if (step === 'stop-vpn') {
-			const raw = fs.readFileSync('vlessConfig.json', 'utf-8');
-			const DNS = JSON.parse(raw);
+	if (step === 'stop-vpn') {
+		const raw = fs.readFileSync('vlessConfig.json', 'utf-8');
+		const DNS = JSON.parse(raw);
 		return (
 			<ScriptRunner
 				command={`sh ${getShellPath('stop-vpn.sh')}`}
