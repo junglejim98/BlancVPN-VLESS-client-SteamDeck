@@ -11,6 +11,7 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import {readConfig} from '../utils/jsonChecker.js';
+import VpnStatus from './connectionTest.js';
 
 type Step =
 	| 'menu'
@@ -20,7 +21,8 @@ type Step =
 	| 'v2RayDownload'
 	| 'tun2SocksDownload'
 	| 'start-vpn'
-	| 'stop-vpn';
+	| 'stop-vpn'
+	| 'checkConnection';
 const menuItems = [
 	{label: '1. Скачать v2Ray', value: 'v2RayDownload'},
 	{label: '2. Скачать tun2Socks', value: 'tun2SocksDownload'},
@@ -29,6 +31,7 @@ const menuItems = [
 	{label: '5. Создать config.json', value: 'buildConfig'},
 	{label: '6. Запустить VPN', value: 'start-vpn'},
 	{label: '7. Остановить VPN', value: 'stop-vpn'},
+	{label: '8. Проверить подключение', value: 'checkConnection'},
 	{label: '0. Выход', value: 'exit'},
 ];
 
@@ -140,6 +143,12 @@ const App = () => {
 							setStep('stop-vpn');
 							return;
 						}
+
+						if (item.value === 'checkConnection') {
+							setError(null);
+							setStep('checkConnection');
+							return;
+						}
 					}}
 				/>
 			</Box>
@@ -221,6 +230,14 @@ const App = () => {
 				dnsHost={getBetween(DNS.VLESS_CONFIG!, '@', ':')}
 				onDone={() => setStep('menu')}
 			/>
+		);
+	}
+
+	if (step === 'checkConnection') {
+		return (
+			<VpnStatus 
+			onDone={() => setStep('menu')}
+				/>
 		);
 	}
 
