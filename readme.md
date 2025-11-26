@@ -18,7 +18,7 @@
 
 ## Что это и зачем
 
-Этот проект — удобный CLI-инструмент для настройки и запуска VPN на Steam Deck через V2Ray/VLESS.  
+Этот проект - удобный CLI-инструмент для настройки и запуска VPN на Steam Deck через V2Ray/VLESS.  
 Вместо ручного скачивания архивов, распаковки и правки конфигов вы получаете меню:
 
 1. Скачать v2Ray
@@ -78,11 +78,11 @@ node ../dist/cli/cli.js
 
 - Утилиты в utils/
 
-  - shCommandsRunner.ts — обёртка над exec для запуска любых shell-команд.
+  - shCommandsRunner.ts - обёртка над exec для запуска любых shell-команд.
 
-  - decoder.ts — формирует config.json из выбранной строки VLESS.
+  - decoder.ts - формирует config.json из выбранной строки VLESS.
 
-  - lookup.ts — преобразует доменное имя в IP перед подключением.
+  - lookup.ts - преобразует доменное имя в IP перед подключением.
 
   - downloader.ts - скачивает и дешефрует BASE64 строку с конфигами.
 
@@ -98,7 +98,7 @@ node ../dist/cli/cli.js
 
   2.  configReader.tsx и countrySelector.tsx разбирают и показывают их по странам.
 
-  3.  После выбора — decoder записывает готовый ~/.config/v2ray/config.json.
+  3.  После выбора - decoder записывает готовый ~/.config/v2ray/config.json.
 
       6.  Скрипты start-vpn.sh/stop-vpn.sh поднимают или опускают интерфейс tun0.
 
@@ -131,7 +131,7 @@ node ../dist/cli/cli.js
 
 <img width="198" height="135" alt="Снимок экрана 2025-07-21 в 12 25 39" src="https://github.com/user-attachments/assets/c64cc48d-9b18-4dee-b474-e9707534683c" />
  
- - Списко VLESS конфигов по странам
+ - Список VLESS конфигов по странам
    
 <img width="330" height="172" alt="Снимок экрана 2025-07-21 в 12 26 38" src="https://github.com/user-attachments/assets/f860f59e-d2f6-4b76-afcc-3fb6e438ab62" />
 
