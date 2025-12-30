@@ -1,4 +1,4 @@
-# BlankVPN-VLESS-Client
+# BlancVPN-VLESS-Client
 
 **VPN-клиент для Steam Deck** на основе V2Ray (протокол VLESS). Позволяет легко скачивать необходимые утилиты, генерировать конфиг и прокидывать весь трафик через SOCKS5 с помощью tun2socks.
 
