@@ -200,25 +200,22 @@ const App = () => {
 	}
 
 	if (step === 'start-vpn') {
-		const raw = fs.readFileSync('vlessConfig.json', 'utf-8');
-		const DNS = JSON.parse(raw);
-		console.log(DNS.VLESS_CONFIG);
+
 		return (
 			<ScriptRunner
 				command={`sh ${getShellPath('start-vpn.sh')}`}
-				dnsHost={getBetween(DNS.VLESS_CONFIG!, '@', ':')}
+				dnsHost={getBetween(config.VLESS_CONFIG!, '@', ':')}
 				onDone={() => setStep('menu')}
 			/>
 		);
 	}
 
 	if (step === 'stop-vpn') {
-		const raw = fs.readFileSync('vlessConfig.json', 'utf-8');
-		const DNS = JSON.parse(raw);
+
 		return (
 			<ScriptRunner
 				command={`sh ${getShellPath('stop-vpn.sh')}`}
-				dnsHost={getBetween(DNS.VLESS_CONFIG!, '@', ':')}
+				dnsHost={getBetween(config.VLESS_CONFIG!, '@', ':')}
 				onDone={() => setStep('menu')}
 			/>
 		);
