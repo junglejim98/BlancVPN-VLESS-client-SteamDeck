@@ -1,4 +1,4 @@
-import {writeFile} from 'node:fs/promises';
+import {writeFile, mkdir} from 'node:fs/promises';
 import path from 'path';
 import os from 'os';
 import getBetween from './parser.js';
@@ -44,7 +44,7 @@ export default async function decoder(stringValue: string) {
 				tag: 'direct',
 			},
 		],
-		routing: {
+		/*routing: {
 			domainStrategy: 'AsIs',
 			rules: [
 				{
@@ -58,13 +58,20 @@ export default async function decoder(stringValue: string) {
 					domain: [getBetween(stringValue, '//', ':')],
 				},
 			],
+		},*/
+		log: {
+			loglevel: 'warning',
+			error: '/tmp/v2ray_error.log',
+			access: '/tmp/v2ray_access.log'
 		},
 	};
 
+	const configDir = path.join(os.homedir(), '.config', 'v2ray');
 	const confJSON = JSON.stringify(conf, null, 2);
 	const configPath = path.join(os.homedir(), '.config', 'v2ray', 'config.json');
 
 	try {
+		await mkdir(configDir, {recursive: true});
 		await writeFile(configPath, confJSON, 'utf-8');
 		console.log('Данные успешно записаны в файл data.json');
 	} catch (err) {
