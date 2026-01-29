@@ -6,7 +6,7 @@ SOCKS_PORT="${SOCKS_PORT:-1080}"
 VPN_SERVER_IP="${VPN_SERVER_IP:?VPN_SERVER_IP is required}"
 
 xray_BIN="$HOME/xray/xray"
-xray_CFG="$HOME/.config/v2ray/config.json"
+xray_CFG="$HOME/.config/xray/config.json"
 TUN2SOCKS_BIN="$HOME/tun2socks/tun2socks"
 
 xray_LOG="/tmp/xray.log"

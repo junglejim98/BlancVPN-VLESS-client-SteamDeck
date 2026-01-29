@@ -1,80 +1,83 @@
 import {writeFile, mkdir} from 'node:fs/promises';
 import path from 'path';
 import os from 'os';
-import getBetween from './parser.js';
 
-export default async function decoder(stringValue: string) {
-	console.log('decoder получил:', stringValue);
+export default async function decoder(vlessUri: string) {
+  const u = new URL(vlessUri.trim()); // vless://uuid@host:port?...#name
 
-	const conf = {
-		inbounds: [
-			{
-				port: 1080,
-				listen: '127.0.0.1',
-				protocol: 'socks',
-				settings: {
-					udp: true,
-				},
-			},
-		],
-		outbounds: [
-			{
-				protocol: 'vless',
-				settings: {
-					vnext: [
-						{
-							address: getBetween(stringValue, '@', ':'),
-							port: 8443,
-							users: [
-								{
-									id: getBetween(stringValue, '//', '@'),
-									encryption: 'none',
-								},
-							],
-						},
-					],
-				},
-				streamSettings: {
-					network: 'tcp',
-					security: 'tls',
-				},
-			},
-			{
-				protocol: 'freedom',
-				tag: 'direct',
-			},
-		],
-		/*routing: {
-			domainStrategy: 'AsIs',
-			rules: [
-				{
-					type: 'field',
-					domain: ['geosite:geolocation-!cn'],
-					outboundTag: 'direct',
-				},
-				{
-					type: 'field',
-					outboundTag: 'direct',
-					domain: [getBetween(stringValue, '//', ':')],
-				},
-			],
-		},*/
-		log: {
-			loglevel: 'warning',
-			error: '/tmp/v2ray_error.log',
-			access: '/tmp/v2ray_access.log'
-		},
-	};
+  const uuid = u.username;
+  const address = u.hostname;
+  const port = u.port ? Number(u.port) : 443;
 
-	const configDir = path.join(os.homedir(), '.config', 'v2ray');
-	const confJSON = JSON.stringify(conf, null, 2);
-	const configPath = path.join(os.homedir(), '.config', 'v2ray', 'config.json');
+  const security = u.searchParams.get('security') ?? 'tls'; // tls / reality / none
+  const type = u.searchParams.get('type') ?? 'tcp';         // tcp/ws/grpc
+  const sni = u.searchParams.get('sni') ?? address;
 
-	try {
-		await mkdir(configDir, {recursive: true});
-		await writeFile(configPath, confJSON, 'utf-8');
-		console.log('Данные успешно записаны в файл data.json');
-	} catch (err) {
-		console.error(err);
-	}
+  const flow = u.searchParams.get('flow') ?? undefined;     // xtls-rprx-vision
+  const fp = u.searchParams.get('fp') ?? 'chrome';
+  const pbk = u.searchParams.get('pbk') ?? '';
+  const sid = u.searchParams.get('sid') ?? '';
+
+  const streamSettings: any = {
+    network: type,
+    security: security === 'none' ? 'none' : security,
+  };
+
+  if (security === 'tls') {
+    streamSettings.tlsSettings = {serverName: sni};
+  }
+
+  if (security === 'reality') {
+    streamSettings.realitySettings = {
+      serverName: sni,
+      fingerprint: fp,
+      publicKey: pbk,
+      shortId: sid,
+    };
+  }
+
+  const conf: any = {
+    log: {
+      loglevel: 'warning',
+      error: '/tmp/xray_error.log',
+      access: '/tmp/xray_access.log',
+    },
+    inbounds: [
+      {
+        port: 1080,
+        listen: '127.0.0.1',
+        protocol: 'socks',
+        settings: {udp: true},
+      },
+    ],
+    outbounds: [
+      {
+        protocol: 'vless',
+        settings: {
+          vnext: [
+            {
+              address,
+              port,
+              users: [
+                {
+                  id: uuid,
+                  encryption: 'none',
+                  ...(flow ? {flow} : {}),
+                },
+              ],
+            },
+          ],
+        },
+        streamSettings,
+      },
+      {protocol: 'freedom', tag: 'direct'},
+    ],
+  };
+
+
+  const configDir = path.join(os.homedir(), '.config', 'xray');
+  const configPath = path.join(configDir, 'config.json');
+
+  await mkdir(configDir, {recursive: true});
+  await writeFile(configPath, JSON.stringify(conf, null, 2), 'utf-8');
 }
