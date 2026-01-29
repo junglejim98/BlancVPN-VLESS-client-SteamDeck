@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 mkdir -p ~/tun2socks
 cd ~/tun2socks
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 set -euo pipefail
 
 VPN_SERVER_IP="${VPN_SERVER_IP:-}"

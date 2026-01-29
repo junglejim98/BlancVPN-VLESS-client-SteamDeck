@@ -1,13 +1,15 @@
+#!/usr/bin/env bash
+
 set -euo pipefail
 
 SOCKS_PORT="${SOCKS_PORT:-1080}"
 VPN_SERVER_IP="${VPN_SERVER_IP:?VPN_SERVER_IP is required}"
 
-V2RAY_BIN="$HOME/v2ray/v2ray"
-V2RAY_CFG="$HOME/.config/v2ray/config.json"
+xray_BIN="$HOME/xray/xray"
+xray_CFG="$HOME/.config/v2ray/config.json"
 TUN2SOCKS_BIN="$HOME/tun2socks/tun2socks"
 
-V2RAY_LOG="/tmp/v2ray.log"
+xray_LOG="/tmp/xray.log"
 TUN_LOG="/tmp/tun2socks.log"
 
 cleanup() {
@@ -22,9 +24,9 @@ IFACE=$(ip route | awk '/default/ {print $5; exit}')
 echo "[0] Удаление старого tun0 (если был)..."
 sudo ip link delete tun0 2>/dev/null || true
 
-echo "[1] Запуск V2Ray..."
-nohup "$V2RAY_BIN" run -config "$V2RAY_CFG" >> "$V2RAY_LOG" 2>&1 &
-echo $! > /tmp/v2ray.pid
+echo "[1] Запуск xray..."
+nohup "$xray_BIN" run -config "$xray_CFG" >> "$xray_LOG" 2>&1 &
+echo $! > /tmp/xray.pid
 sleep 1
 
 echo "[1.1] Проверка SOCKS (до маршрутов)..."
@@ -60,6 +62,6 @@ echo "✅ IP после маршрутов: $(cat /tmp/vpn_ip_after.txt)"
 
 echo "✅ VPN запущен!"
 echo "Логи:"
-echo "  $V2RAY_LOG"
+echo "  $xray_LOG"
 echo "  $TUN_LOG"
-echo "  /tmp/v2ray_error.log (из config.json)"
+echo "  /tmp/xray_error.log (из config.json)"

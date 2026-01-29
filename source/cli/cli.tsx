@@ -12,17 +12,18 @@ import path from 'path';
 import os from 'os';
 import {readConfig} from '../utils/jsonChecker.js';
 
+
 type Step =
 	| 'menu'
 	| 'enterUrl'
 	| 'showList'
 	| 'buildConfig'
-	| 'v2RayDownload'
+	| 'xrayDownload'
 	| 'tun2SocksDownload'
 	| 'start-vpn'
 	| 'stop-vpn';
 const menuItems = [
-	{label: '1. Скачать v2Ray', value: 'v2RayDownload'},
+	{label: '1. Скачать xRay', value: 'xrayDownload'},
 	{label: '2. Скачать tun2Socks', value: 'tun2SocksDownload'},
 	{label: '3. Ввести URL', value: 'enterUrl'},
 	{label: '4. Показать список', value: 'showList'},
@@ -35,7 +36,7 @@ const menuItems = [
 const App = () => {
 	const [step, setStep] = useState<Step>('menu');
 	const [error, setError] = useState<string | null>(null);
-	const configPathV2ray = path.join(os.homedir(), 'v2ray');
+	const configPathXray = path.join(os.homedir(), 'xray');
 	const configPathTun2socks = path.join(os.homedir(), 'tun2socks');
 	const config = readConfig();
 
@@ -75,13 +76,13 @@ const App = () => {
 							process.exit(0);
 						}
 
-						if (item.value === 'v2RayDownload') {
-							if (fs.existsSync(configPathV2ray)) {
-								setError('v2ray уже скачан');
+						if (item.value === 'xrayDownload') {
+							if (fs.existsSync(configPathXray)) {
+								setError('xray уже скачан');
 								return;
 							}
 							setError(null);
-							setStep('v2RayDownload');
+							setStep('xrayDownload');
 							return;
 						}
 
@@ -146,10 +147,10 @@ const App = () => {
 		);
 	}
 
-	if (step === 'v2RayDownload') {
+	if (step === 'xrayDownload') {
 		return (
 			<ScriptRunner
-				command={`sh ${getShellPath('v2rayDownload.sh')}`}
+				command={`sh ${getShellPath('xrayDownload.sh')}`}
 				onDone={() => setStep('menu')}
 			/>
 		);
@@ -200,26 +201,45 @@ const App = () => {
 	}
 
 	if (step === 'start-vpn') {
+  const raw = fs.readFileSync('vlessConfig.json', 'utf-8');
+  const cfg = JSON.parse(raw);
 
-		return (
-			<ScriptRunner
-				command={`sh ${getShellPath('start-vpn.sh')}`}
-				dnsHost={getBetween(config.VLESS_CONFIG!, '@', ':')}
-				onDone={() => setStep('menu')}
-			/>
-		);
-	}
+  let dnsHost = '';
+  try {
+    dnsHost = new URL(cfg.VLESS_CONFIG!).hostname;
+  } catch {
+    dnsHost = getBetween(cfg.VLESS_CONFIG!, '@', ':');
+  }
 
-	if (step === 'stop-vpn') {
+  return (
+    <ScriptRunner
+      command={`sh ${getShellPath('start-vpn.sh')}`}
+      dnsHost={dnsHost}
+      onDone={() => setStep('menu')}
+    />
+  );
+}
 
-		return (
-			<ScriptRunner
-				command={`sh ${getShellPath('stop-vpn.sh')}`}
-				dnsHost={getBetween(config.VLESS_CONFIG!, '@', ':')}
-				onDone={() => setStep('menu')}
-			/>
-		);
-	}
+if (step === 'stop-vpn') {
+  const raw = fs.readFileSync('vlessConfig.json', 'utf-8');
+  const cfg = JSON.parse(raw);
+
+  let dnsHost = '';
+  try {
+    dnsHost = new URL(cfg.VLESS_CONFIG!).hostname;
+  } catch {
+    dnsHost = getBetween(cfg.VLESS_CONFIG!, '@', ':');
+  }
+
+  return (
+    <ScriptRunner
+      command={`sh ${getShellPath('stop-vpn.sh')}`}
+      dnsHost={dnsHost}
+      onDone={() => setStep('menu')}
+    />
+  );
+}
+
 
 	return null;
 };
