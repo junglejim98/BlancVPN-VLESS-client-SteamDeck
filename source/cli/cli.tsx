@@ -21,7 +21,9 @@ type Step =
 	| 'xrayDownload'
 	| 'tun2SocksDownload'
 	| 'start-vpn'
-	| 'stop-vpn';
+	| 'stop-vpn'
+	| 'status'
+	| 'logs';
 const menuItems = [
 	{label: '1. Скачать xRay', value: 'xrayDownload'},
 	{label: '2. Скачать tun2Socks', value: 'tun2SocksDownload'},
@@ -30,6 +32,8 @@ const menuItems = [
 	{label: '5. Создать config.json', value: 'buildConfig'},
 	{label: '6. Запустить VPN', value: 'start-vpn'},
 	{label: '7. Остановить VPN', value: 'stop-vpn'},
+	{label: '8. Статус подключения', value: 'status'},
+	{label: '9. Логи', value: 'logs'},
 	{label: '0. Выход', value: 'exit'},
 ];
 
@@ -134,12 +138,24 @@ const App = () => {
 
 						if (item.value === 'stop-vpn') {
 							if (!config.VLESS_URL) {
-								setError('Сначала выберите строку (пункт 4)');
+								setError('Сначала выберите страну (пункт 4)');
 								return;
 							}
 							setError(null);
 							setStep('stop-vpn');
 							return;
+						}
+
+						if (item.value === 'status') {
+							setError(null);
+							setStep('status')
+							return;
+						}
+
+						if(item.value === 'logs') {
+							setError(null);
+							setStep('logs')
+							return
 						}
 					}}
 				/>
@@ -224,6 +240,24 @@ if (step === 'stop-vpn') {
       onDone={() => setStep('menu')}
     />
   );
+}
+
+if(step === 'status') {
+	return(
+		<ScriptRunner 
+		command={`bash ${getShellPath('status.sh')}`}
+		onDone={()=> setStep('menu')}
+		/>
+	);
+}
+
+if(step === 'logs') {
+	return(
+		<ScriptRunner
+		command={`bash ${getShellPath('logs.sh')}`}
+		onDone={() => setStep('menu')}
+		/>
+	);
 }
 
 	return null;
