@@ -1,0 +1,13 @@
+@use 'variables';
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.container { 
+    background: map-get(variables.$colors, "main_color");
+    display: flex;
+    width: map-get(variables.$sizes, "main_width");
+    height: map-get(variables.$sizes, "main_height");
+}

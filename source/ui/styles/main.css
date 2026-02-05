@@ -1,0 +1,13 @@
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  background: #918D8D;
+  display: flex;
+  width: 400px;
+  height: 660px;
+}
+
+/*# sourceMappingURL=main.css.map */
