@@ -1,0 +1,56 @@
+@use 'variables';
+
+
+
+.container { 
+    border-radius: 5px;
+    background: map-get(variables.$colors, "main_color");
+    width: map-get(variables.$sizes, "main_width");
+    height: map-get(variables.$sizes, "main_height");
+    gap: 10px;
+    padding: 10px;
+}
+
+.grid-12 {
+    display: grid;
+    grid-template-rows: repeat(12, 1fr);
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.grid-header {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    img{
+        width: map-get(variables.$sizes, "icons_header_size");
+    }
+}
+
+.grid-main {
+    grid-column: 1/ -1;
+    grid-row: 2 / 12;
+
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    row-gap: 18px;
+    transform: translateY(-150px);
+    img {
+        width: map-get(variables.$sizes, "power_button_size");
+    }
+}
+
+.country_select {
+    width: min(520px, 90%);
+}
+
+.grid-footer {
+    grid-column: 1 / -1;
+    grid-row: 12 / 13;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
