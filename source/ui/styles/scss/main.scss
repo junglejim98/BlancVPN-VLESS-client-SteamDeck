@@ -1,13 +1,13 @@
 @use 'variables';
 
 
-
+/* Основной контейнер и сетка */
 .container { 
     border-radius: 5px;
     background: map-get(variables.$colors, "main_color");
     width: map-get(variables.$sizes, "main_width");
     height: map-get(variables.$sizes, "main_height");
-    gap: 10px;
+    gap: map-get(variables.$sizes, "gap");
     padding: 10px;
 }
 
@@ -23,12 +23,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
+    gap: map-get(variables.$sizes, "gap");
     img{
-        width: map-get(variables.$sizes, "icons_header_size");
+        width: map-get(variables.$sizes, "icons_size");
     }
 }
-
+/*Главный блок*/
 .grid-main {
     grid-column: 1/ -1;
     grid-row: 2 / 12;
@@ -36,74 +36,92 @@
     display: grid;
     justify-items: center;
     align-content: center;
-    row-gap: 18px;
+    row-gap: map-get(variables.$sizes, "gap");
     .power-button {
         width: map-get(variables.$sizes, "power_button_size");
-        transform: translateY(-100px);
+        transform: translateY(-5px);
     }
 }
 
-.server-card-head {
-    transform: translateY(-50px);
-    display: grid;
-    grid-template-columns: 36px 1fr auto;
-    align-items: center;
-    gap: 10px;
+
+
+/*Карточка сервера (страны, название конфига, проверка скорости)*/
+.server-card {
+  position: relative;
+   min-width: map-get(variables.$sizes, "countries_size");
+   height: map-get(variables.$sizes, "countries_size");
+          .server-card-head {
+            /*Хэддер карточки с кнопками и названием*/
+            display: grid;
+            grid-template-columns: 36px 1fr auto;
+            align-items: center;
+            gap: map-get(variables.$sizes, "gap");
+          }
+                .server-card__chevron {
+            width: map-get(variables.$sizes, "icons_size");
+            height: map-get(variables.$sizes, "icons_size");
+            border: 0;
+            position: relative;
+            background: transparent;
+            cursor: pointer;
+                }
+                &.is-open .server-card__chevron::before {
+                  transform: rotate(0deg);
+                }
+
+                .server-card__chevron::before {
+                  content: "";
+                  display: block;
+                  height: map-get(variables.$sizes, "icons_size");
+                  margin: auto;
+                  background: url("../icons/chevron.svg") center/contain no-repeat;
+                  transform: rotate(180deg);
+                  transition: transform .15s ease;
+              }
+                .server-card__info {
+                font-weight: 700;
+                line-height: 1.1;
+              }
+
+              .server-card__subtitle {
+                opacity: 0.7;
+                font-size: 12px;
+                margin-top: 4px;
+              }
+
+
+              .server-card__speed {
+                border: 0;
+                background: transparent;
+                cursor: pointer;
+                padding: 6px;
+                display: grid;
+                place-items: center;
+                img {
+                  width: map-get(variables.$sizes, "icons_size");
+                }
+              }
+        
+      /*Выпадающий список стран*/
+      .server-card__dropdown {
+        display:none;
+        
+      }
+      &.is-open .server-card__dropdown {
+          display: flex;
+          flex-direction: column;
+          overflow-y: auto;
+          gap: map-get(variables.$sizes, "gap");   
+          max-height: map-get(variables.$sizes, "countries_size");
+          button {
+            border: none;
+            background: white;
+            cursor: pointer;
+          }
+      }
 }
 
-
-.server-card__chevron {
-    width: 30px;
-    height: 30px;
-    border: 0;
-    position: relative;
-    background: transparent;
-    cursor: pointer;
-}
-
-.server-card__chevron::before {
-  content: "";
-  display: block;
-  width: map-get(variables.$sizes, "icons_header_size");
-  height: map-get(variables.$sizes, "icons_header_size");
-  margin: auto;
-  background: url("../icons/chevron.svg") center/contain no-repeat;
-  transform: rotate(0deg);
-  transition: transform .15s ease;
-}
-
-.server-card.is-open .server-card__chevron::before {
-  transform: rotate(180deg);
-}
-
-.server-card__title {
-  font-weight: 700;
-  line-height: 1.1;
-}
-
-.server-card__subtitle {
-  opacity: 0.7;
-  font-size: 12px;
-  margin-top: 4px;
-}
-
-
-.server-card__speed {
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  padding: 6px;
-  display: grid;
-  place-items: center;
-  img {
-    width: map-get(variables.$sizes, "icons_header_size");
-  }
-}
-
-.country_select {
-    width: min(520px, 90%);
-}
-
+/*Футер*/
 .grid-footer {
     grid-column: 1 / -1;
     grid-row: 12 / 13;

@@ -1,3 +1,5 @@
+@charset "UTF-8";
+/* Основной контейнер и сетка */
 .container {
   border-radius: 5px;
   background: #918D8D;
@@ -25,23 +27,93 @@
   width: 30px;
 }
 
+/*Главный блок*/
 .grid-main {
   grid-column: 1/-1;
   grid-row: 2/12;
   display: grid;
   justify-items: center;
   align-content: center;
-  row-gap: 18px;
-  transform: translateY(-150px);
+  row-gap: 10px;
 }
-.grid-main img {
+.grid-main .power-button {
   width: 150px;
+  transform: translateY(-5px);
 }
 
-.country_select {
-  width: min(520px, 90%);
+/*Карточка сервера (страны, название конфига, проверка скорости)*/
+.server-card {
+  position: relative;
+  min-width: 350px;
+  height: 350px;
+}
+.server-card .server-card-head {
+  /*Хэддер карточки с кнопками и названием*/
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+.server-card .server-card__chevron {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  position: relative;
+  background: transparent;
+  cursor: pointer;
+}
+.server-card.is-open .server-card__chevron::before {
+  transform: rotate(0deg);
+}
+.server-card .server-card__chevron::before {
+  content: "";
+  display: block;
+  height: 30px;
+  margin: auto;
+  background: url("../icons/chevron.svg") center/contain no-repeat;
+  transform: rotate(180deg);
+  transition: transform 0.15s ease;
+}
+.server-card .server-card__info {
+  font-weight: 700;
+  line-height: 1.1;
+}
+.server-card .server-card__subtitle {
+  opacity: 0.7;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.server-card .server-card__speed {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px;
+  display: grid;
+  place-items: center;
+}
+.server-card .server-card__speed img {
+  width: 30px;
+}
+.server-card {
+  /*Выпадающий список стран*/
+}
+.server-card .server-card__dropdown {
+  display: none;
+}
+.server-card.is-open .server-card__dropdown {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  gap: 10px;
+  max-height: 350px;
+}
+.server-card.is-open .server-card__dropdown button {
+  border: none;
+  background: white;
+  cursor: pointer;
 }
 
+/*Футер*/
 .grid-footer {
   grid-column: 1/-1;
   grid-row: 12/13;
