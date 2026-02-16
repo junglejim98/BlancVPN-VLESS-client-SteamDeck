@@ -24,8 +24,49 @@
     align-items: center;
     justify-content: space-between;
     gap: map-get(variables.$sizes, "gap");
-    img{
-        width: map-get(variables.$sizes, "icons_size");
+
+
+    .add-button {
+      width: map-get(variables.$sizes, "icons_size");
+      height: map-get(variables.$sizes, "icons_size");
+      border: 0;
+      position: relative;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .add-button::before {
+      content: "";
+      display: block;
+      height: map-get(variables.$sizes, "icons_size");
+      margin: auto;
+      background: url("../icons/plus.svg") center/contain no-repeat;
+    }
+    .config-add {
+      position: relative;
+    }
+    .modal {
+      display: none;
+      position: absolute;
+      z-index: 1000;
+      translate: 20px -10px;
+    }
+
+    &.is-open .modal {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      position: relative;
+      font-size: 15px;
+      button {
+        margin-top: 10px;
+      }
     }
 }
 /*Главный блок*/

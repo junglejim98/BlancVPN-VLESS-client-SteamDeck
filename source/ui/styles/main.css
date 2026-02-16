@@ -23,8 +23,44 @@
   justify-content: space-between;
   gap: 10px;
 }
-.grid-header img {
+.grid-header .add-button {
   width: 30px;
+  height: 30px;
+  border: 0;
+  position: relative;
+  background: transparent;
+  cursor: pointer;
+}
+.grid-header .add-button::before {
+  content: "";
+  display: block;
+  height: 30px;
+  margin: auto;
+  background: url("../icons/plus.svg") center/contain no-repeat;
+}
+.grid-header .config-add {
+  position: relative;
+}
+.grid-header .modal {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  translate: 20px -10px;
+}
+.grid-header.is-open .modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.grid-header .modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  position: relative;
+  font-size: 15px;
+}
+.grid-header .modal-content button {
+  margin-top: 10px;
 }
 
 /*Главный блок*/

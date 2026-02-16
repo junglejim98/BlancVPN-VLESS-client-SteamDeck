@@ -8,10 +8,19 @@
         </head>
         <body>
             <div class="container grid-12">
-                <header class="grid-header">
-                    <div class="settings"><img src="./icons/gear.svg" alt="settings"></div>
-                    <div class="logo">SVP</div>
-                    <div class="config_add"><img src="./icons/plus.svg" alt="add config"></div>
+                <header class="grid-header is-open">
+                    <div class="config-add">
+                        <button class="add-button" type="button" aria-label="add config">
+                        </button>
+                    <div class="modal">
+                        <div class="modal-content">
+                            <label for="vlessURL">Past VLESS URL
+                                <input type="text" id="vlessURL">
+                            </label>
+                            <button>Send</button>
+                        </div>
+                    </div>
+                    </div>
                 </header>
                 <main class="grid-main">
                     <img class="power-button" src="./icons/power_button.svg" alt="power button">
