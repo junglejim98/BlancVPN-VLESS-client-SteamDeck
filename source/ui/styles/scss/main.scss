@@ -1,16 +1,34 @@
 @use 'variables';
-
+@use 'mixins';
 
 /* Основной контейнер и сетка */
 .container { 
-    border-radius: 5px;
-    background: map-get(variables.$colors, "main_color");
+    border: map-get(variables.$sizes, "border-1") solid map-get(variables.$colors, "border");
+    border-radius: map-get(variables.$sizes, "radius-lg");
+    
+    font-family: map-get(variables.$text, "font-family");
+    font-size: map-get(variables.$text, "body-size");
+    background-image: linear-gradient(to bottom right, map-get(variables.$colors, "bg"), map-get(variables.$colors, "bg-gradient-2") );
+    color: map-get(variables.$colors, "text");
     width: map-get(variables.$sizes, "main_width");
     height: map-get(variables.$sizes, "main_height");
-    gap: map-get(variables.$sizes, "gap");
-    padding: 10px;
+    gap: map-get(variables.$sizes, "space-1");
+    padding: map-get(variables.$sizes, "space-2");
 }
+.icon-btn {
+      @include mixins.icon-btn();
+      @include mixins.icon-before();
 
+      --icon: none;
+    }
+
+.icon-btn--plus { --icon: url("../icons/plus.svg"); }
+.icon-btn--speed   { --icon: url("../icons/speed.svg"); }
+.icon-btn--chevron { --icon: url("../icons/chevron.svg"); }
+.icon-btn--chevron::before {
+                  transform: rotate(0deg);
+                  transition: transform .15s ease;
+                }
 .grid-12 {
     display: grid;
     grid-template-rows: repeat(12, 1fr);
@@ -23,52 +41,44 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: map-get(variables.$sizes, "gap");
+    gap: map-get(variables.$sizes, "space-1");
 
-
-    .add-button {
-      width: map-get(variables.$sizes, "icons_size");
-      height: map-get(variables.$sizes, "icons_size");
-      border: 0;
-      position: relative;
-      background: transparent;
-      cursor: pointer;
-    }
-
-    .add-button::before {
-      content: "";
-      display: block;
-      height: map-get(variables.$sizes, "icons_size");
-      margin: auto;
-      background: url("../icons/plus.svg") center/contain no-repeat;
-    }
     .config-add {
       position: relative;
     }
-    .modal {
+    .popover {
+      
       display: none;
       position: absolute;
       z-index: 1000;
       translate: 20px -10px;
+      
     }
 
-    &.is-open .modal {
+    &.is-open .popover {
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    .modal-content {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 5px;
+    .popover__content {
+      @include mixins.glass-card;
+      padding: map-get(variables.$sizes, "space-3");
       position: relative;
-      font-size: 15px;
+      font-size: map-get(variables.$text, "regular-font-size");
       button {
-        margin-top: 10px;
-      }
+        @include mixins.btn-base;
+        width: 100%;
+        margin-top: map-get(variables.$sizes, "space-2");
+      }      
     }
 }
+
+
+
+
+
+
 /*Главный блок*/
 .grid-main {
     grid-column: 1/ -1;
@@ -77,71 +87,53 @@
     display: grid;
     justify-items: center;
     align-content: center;
-    row-gap: map-get(variables.$sizes, "gap");
+    gap: map-get(variables.$sizes, "space-1");
+    
     .power-button {
-        width: map-get(variables.$sizes, "power_button_size");
-        transform: translateY(-5px);
-    }
+        @include mixins.icon-btn(map-get(variables.$sizes, "power_button_size"));
+        @include mixins.icon-before(map-get(variables.$sizes, "power_button_size"));
+        --icon: url("../icons/power_button.svg");
+        transform: translateY(- map-get(variables.$sizes, "space-3"));
+    } 
 }
 
 
 
 /*Карточка сервера (страны, название конфига, проверка скорости)*/
 .server-card {
-  position: relative;
+   @include mixins.glass-card;
+   position: relative;
    min-width: map-get(variables.$sizes, "countries_size");
-   height: map-get(variables.$sizes, "countries_size");
+   height: map-get(variables.$sizes, "card-size");
           .server-card-head {
             /*Хэддер карточки с кнопками и названием*/
+            border-top-left-radius: map-get(variables.$sizes, "radius-lg" );
+            border-top-right-radius: map-get(variables.$sizes, "radius-lg" );
+            background-color: map-get(variables.$colors, "bg-button");
+            padding: 0 map-get(variables.$sizes, "space-3" ) 0 0;
             display: grid;
             grid-template-columns: 36px 1fr auto;
             align-items: center;
-            gap: map-get(variables.$sizes, "gap");
+            gap: map-get(variables.$sizes, "space-1");
           }
-                .server-card__chevron {
-            width: map-get(variables.$sizes, "icons_size");
-            height: map-get(variables.$sizes, "icons_size");
-            border: 0;
-            position: relative;
-            background: transparent;
-            cursor: pointer;
-                }
-                &.is-open .server-card__chevron::before {
-                  transform: rotate(0deg);
+                
+                &.is-open .icon-btn--chevron::before {
+                  transform: rotate(180deg);
                 }
 
-                .server-card__chevron::before {
-                  content: "";
-                  display: block;
-                  height: map-get(variables.$sizes, "icons_size");
-                  margin: auto;
-                  background: url("../icons/chevron.svg") center/contain no-repeat;
-                  transform: rotate(180deg);
-                  transition: transform .15s ease;
-              }
                 .server-card__info {
-                font-weight: 700;
-                line-height: 1.1;
+                font-weight: map-get(variables.$text, "bold-font-weight");
+                line-height: map-get(variables.$text, "regular-line-height");
+                font-size: map-get(variables.$text, "title-size");
               }
 
               .server-card__subtitle {
-                opacity: 0.7;
-                font-size: 12px;
-                margin-top: 4px;
+                opacity: map-get(variables.$sizes, "opacity-muted");
+                font-size: map-get(variables.$text, "small-size");
               }
 
 
-              .server-card__speed {
-                border: 0;
-                background: transparent;
-                cursor: pointer;
-                padding: 6px;
-                display: grid;
-                place-items: center;
-                img {
-                  width: map-get(variables.$sizes, "icons_size");
-                }
-              }
+              
         
       /*Выпадающий список стран*/
       .server-card__dropdown {
@@ -151,13 +143,14 @@
       &.is-open .server-card__dropdown {
           display: flex;
           flex-direction: column;
-          overflow-y: auto;
-          gap: map-get(variables.$sizes, "gap");   
+          overflow-y: auto;   
           max-height: map-get(variables.$sizes, "countries_size");
           button {
-            border: none;
-            background: white;
-            cursor: pointer;
+            @include mixins.btn-base;
+            margin: map-get(variables.$sizes, "space-1" );
+          }
+          button.selected{
+            background-color: map-get(variables.$colors, "accent");
           }
       }
 }

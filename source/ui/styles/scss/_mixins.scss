@@ -1,0 +1,49 @@
+@use 'variables';
+
+@mixin icon-btn($size: null) {
+    $s: if($size == null, map-get(variables.$sizes, "icons_size"), $size);
+    width: $s;
+    height: $s;
+    border: 0;
+    position: relative;
+    background: transparent;
+    cursor: pointer;
+
+    display: grid;
+    place-items: center;
+
+}
+
+@mixin icon-before($size: null) {
+  $s: if($size == null, map-get(variables.$sizes, "icons_size"), $size);
+    &::before {
+      content: "";
+      display: block;
+      height: $s;
+      width: $s;
+      margin: auto;
+      background: var(--icon) center/contain no-repeat;
+      
+    }
+}
+@mixin glass-card {
+      box-shadow: map-get(variables.$sizes, "shadow");
+      backdrop-filter: blur(map-get(variables.$sizes, "blur"));
+      -webkit-backdrop-filter: blur(map-get(variables.$sizes, "blur"));
+      background: map-get(variables.$colors, "card");
+      border: map-get(variables.$sizes, "border-1") solid map-get(variables.$colors, "border");
+      border-radius: map-get(variables.$sizes, "radius-lg");
+}
+
+@mixin btn-base {
+      color: map-get(variables.$colors, "text");
+      background: map-get(variables.$colors, "bg-button");
+      padding:  map-get(variables.$sizes, "space-1");
+      border: map-get(variables.$sizes, "border-1") solid map-get(variables.$colors, "border");
+      border-radius: map-get(variables.$sizes, "radius-md");
+      cursor: pointer;
+
+      &:hover {
+        background-color: map-get(variables.$colors, "hover");
+      }
+}
