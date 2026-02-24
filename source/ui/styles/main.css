@@ -20,6 +20,7 @@
   position: relative;
   background: transparent;
   cursor: pointer;
+  padding-left: 10px;
   display: grid;
   place-items: center;
 }
@@ -95,7 +96,7 @@
   background: rgba(80, 80, 80, 0.5);
   padding: 5px;
   border: 1px solid rgb(120, 120, 120);
-  border-radius: 13px;
+  border-radius: 20px;
   cursor: pointer;
 }
 .grid-header .popover__content button:hover {
@@ -122,6 +123,7 @@
   position: relative;
   background: transparent;
   cursor: pointer;
+  padding-left: 10px;
   display: grid;
   place-items: center;
 }
@@ -157,7 +159,7 @@
   background-color: rgba(80, 80, 80, 0.5);
   padding: 0 20px 0 0;
   display: grid;
-  grid-template-columns: 36px 1fr auto;
+  grid-template-columns: 36px 1fr 36px;
   align-items: center;
   gap: 5px;
 }
@@ -165,6 +167,7 @@
   transform: rotate(180deg);
 }
 .server-card .server-card__info {
+  padding-left: 10px;
   font-weight: 600;
   line-height: 1.5;
   font-size: 1.1rem;
@@ -172,9 +175,6 @@
 .server-card .server-card__subtitle {
   opacity: 0.5;
   font-size: 0.7rem;
-}
-.server-card {
-  /*Выпадающий список стран*/
 }
 .server-card .server-card__dropdown {
   display: none;
@@ -190,7 +190,7 @@
   background: rgba(80, 80, 80, 0.5);
   padding: 5px;
   border: 1px solid rgb(120, 120, 120);
-  border-radius: 13px;
+  border-radius: 20px;
   cursor: pointer;
 }
 .server-card.is-open .server-card__dropdown button:hover {

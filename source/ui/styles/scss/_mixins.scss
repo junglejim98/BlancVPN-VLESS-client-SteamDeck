@@ -8,7 +8,7 @@
     position: relative;
     background: transparent;
     cursor: pointer;
-
+    padding-left: map-get(variables.$sizes, "space-2");
     display: grid;
     place-items: center;
 
@@ -40,7 +40,7 @@
       background: map-get(variables.$colors, "bg-button");
       padding:  map-get(variables.$sizes, "space-1");
       border: map-get(variables.$sizes, "border-1") solid map-get(variables.$colors, "border");
-      border-radius: map-get(variables.$sizes, "radius-md");
+      border-radius: map-get(variables.$sizes, "radius-lg");
       cursor: pointer;
 
       &:hover {
