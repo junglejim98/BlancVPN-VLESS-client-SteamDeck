@@ -1,9 +1,0 @@
-{
-  "extends": "@sindresorhus/tsconfig",
-  "compilerOptions": {
-    "outDir": "dist",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "include": ["source"]
-}
