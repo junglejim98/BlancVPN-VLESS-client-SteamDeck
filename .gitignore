@@ -1,3 +1,4 @@
 source/frontend/node_modules
 source/frontend/dist
 build/bin
+node_modules
