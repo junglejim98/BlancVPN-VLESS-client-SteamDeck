@@ -48,15 +48,28 @@
     }
     .popover {
       
-      display: none;
+      
       position: absolute;
       z-index: 1000;
       translate: 20px -10px;
+
+
+      opacity: 0;
+      transform: translateY(-6px) scale(0.98);
+      visibility: hidden;
+      pointer-events: none;
+
+      transition: opacity 160ms ease, transform 160ms ease, visibility 0s linear 160ms;
+
       
     }
 
     &.is-open .popover {
-      display: flex;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity 160ms ease, transform 160ms ease, visibility 0s;
       justify-content: center;
       align-items: center;
     }
@@ -86,7 +99,7 @@
 
     display: grid;
     justify-items: center;
-    align-content: center;
+    align-content: start;
     gap: map-get(variables.$sizes, "space-1");
     
     .power-button {
@@ -101,20 +114,36 @@
 
 /*Карточка сервера (страны, название конфига, проверка скорости)*/
 .server-card {
+   transform: translateZ(0);
+   will-change: transform;
+   backface-visibility: hidden;
+   isolation: isolate;
+   contain: paint;
+
    @include mixins.glass-card;
    position: relative;
    min-width: map-get(variables.$sizes, "countries_size");
-   height: map-get(variables.$sizes, "card-size");
+
+   
+          &.is-open .server-card-head{
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+          }
           .server-card-head {
             /*Хэддер карточки с кнопками и названием*/
             border-top-left-radius: map-get(variables.$sizes, "radius-lg" );
             border-top-right-radius: map-get(variables.$sizes, "radius-lg" );
+            border-bottom-left-radius: map-get(variables.$sizes, "radius-lg" );
+            border-bottom-right-radius: map-get(variables.$sizes, "radius-lg" );
+
+
             background-color: map-get(variables.$colors, "bg-button");
             padding: 0 map-get(variables.$sizes, "space-3" ) 0 0;
             display: grid;
             grid-template-columns: 36px 1fr 36px;  
             align-items: center;
             gap: map-get(variables.$sizes, "space-1");
+            transition: border-radius 220ms ease;
           }
                 
                 &.is-open .icon-btn--chevron::before {
@@ -138,23 +167,47 @@
         
   
       .server-card__dropdown {
-        display:none;
-        
+        display:grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 220ms ease;
+
+        padding: 0;
+      }
+      .server-card__dropdown-inner {
+        max-height: 0;
+        scrollbar-gutter: stable;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+
+        padding: map-get(variables.$sizes, "space-1");
+
+        opacity: 0;
+        transform: translateY(-8px);
+
+        transition: opacity 0ms linear, transform 0ms linear;
       }
       &.is-open .server-card__dropdown {
-          display: flex;
-          flex-direction: column;
-          overflow-y: auto;   
-          max-height: map-get(variables.$sizes, "countries_size");
-          button {
+          grid-template-rows: 1fr;
+      }
+      &.is-open .server-card__dropdown-inner {
+        transition: opacity 160ms ease 60ms, transform 160ms ease 60ms;
+        overflow-y: auto;
+        max-height: map-get(variables.$sizes, "countries_size");
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .server-card__dropdown-inner button {
             @include mixins.btn-base;
             margin: map-get(variables.$sizes, "space-1" );
           }
-          button.selected{
+      .server-card__dropdown-inner button.selected{
             background-color: map-get(variables.$colors, "accent");
           }
-      }
 }
+
+
 
 /*Футер*/
 .grid-footer {
