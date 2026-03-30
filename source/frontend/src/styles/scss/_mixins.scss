@@ -2,7 +2,6 @@
 
 @mixin icon-btn($size: null) {
     $s: if($size == null, map-get(variables.$sizes, "icons_size"), $size);
-    width: $s;
     height: $s;
     border: 0;
     position: relative;

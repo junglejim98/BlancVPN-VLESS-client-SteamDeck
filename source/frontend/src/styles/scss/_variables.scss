@@ -21,7 +21,7 @@ $sizes: (
     "countries_size": 350px,
     "icons_size": 30px,
     "card-size": 400px,
-    "power_button_size": 150px,
+    "power_button_size": 100px,
 
     "radius-lg": 20px,
     "radius-md": 13px,
@@ -36,6 +36,13 @@ $sizes: (
     "opacity-muted": 0.5,
 );
 
+
+$pb: map-get($sizes, "power_button_size");
+$powerBt: (
+    "base": $pb,
+    "connecting": $pb * 1.35,
+);
+
 $text: (
     "font-family": system-ui,
     "title-size": 1.1rem,
@@ -43,4 +50,4 @@ $text: (
     "small-size": 0.7rem,
     "regular-line-height": 1.5,
     "bold-font-weight": 600,
-)
+);
