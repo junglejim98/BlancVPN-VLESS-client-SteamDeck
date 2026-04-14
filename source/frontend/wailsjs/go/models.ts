@@ -1,5 +1,27 @@
 export namespace main {
 	
+	export class DependencyStatus {
+	    ready: boolean;
+	    xray: boolean;
+	    tun2socks: boolean;
+	    xrayConfigDir: boolean;
+	    v2rayConfigDir: boolean;
+	    message: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new DependencyStatus(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.ready = source["ready"];
+	        this.xray = source["xray"];
+	        this.tun2socks = source["tun2socks"];
+	        this.xrayConfigDir = source["xrayConfigDir"];
+	        this.v2rayConfigDir = source["v2rayConfigDir"];
+	        this.message = source["message"];
+	    }
+	}
 	export class ServerOption {
 	    id: string;
 	    label: string;
@@ -24,6 +46,7 @@ export namespace main {
 	    servers: ServerOption[];
 	    selectedUrl: string;
 	    providerName: string;
+	    dependenciesInstalled: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new VpnBootstrapData(source);
@@ -34,6 +57,7 @@ export namespace main {
 	        this.servers = this.convertValues(source["servers"], ServerOption);
 	        this.selectedUrl = source["selectedUrl"];
 	        this.providerName = source["providerName"];
+	        this.dependenciesInstalled = source["dependenciesInstalled"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

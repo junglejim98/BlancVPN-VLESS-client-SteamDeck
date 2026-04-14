@@ -61,7 +61,7 @@ export default function PowerButton ({
                 type="button"
                 aria-label={isConnected ? "Disconnect VPN" : "Connect VPN"}
                 onClick={handleClick}
-                disabled={isConnecting || isConnecting || isDisconnecting}>
+                disabled={disabled || isConnecting || isDisconnecting}>
 
                 </button>
                 </div>

@@ -200,6 +200,24 @@ html, body {
     }
 }
 
+.install-deps {
+  width: map-get(variables.$sizes, "countries_size");
+  display: grid;
+  gap: map-get(variables.$sizes, "space-1");
+}
+
+.install-deps__button {
+  @include mixins.btn-base;
+  width: 100%;
+  font-size: map-get(variables.$text, "body-size");
+}
+
+.install-deps__status {
+  font-size: map-get(variables.$text, "small-size");
+  opacity: map-get(variables.$sizes, "opacity-muted");
+  text-align: center;
+}
+
 
 
 /*Карточка сервера (страны, название конфига, проверка скорости)*/
@@ -234,6 +252,17 @@ html, body {
             align-items: center;
             gap: map-get(variables.$sizes, "space-1");
             transition: border-radius 220ms ease;
+          }
+
+          .server-card-head .icon-btn {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+          }
+
+          .server-card-head .icon-btn::before {
+            width: map-get(variables.$sizes, "server-card-icon-size");
+            height: map-get(variables.$sizes, "server-card-icon-size");
           }
                 
                 &.is-open .icon-btn--chevron::before {

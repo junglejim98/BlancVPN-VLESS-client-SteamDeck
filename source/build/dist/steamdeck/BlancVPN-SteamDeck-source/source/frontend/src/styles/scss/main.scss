@@ -1,0 +1,385 @@
+@use 'variables';
+@use 'mixins';
+
+html, body, #root, #App {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+html, body {
+    overflow: hidden;
+    background: map-get(variables.$colors, "bg");
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Основной контейнер и сетка */
+.container { 
+    font-family: map-get(variables.$text, "font-family");
+    font-size: map-get(variables.$text, "body-size");
+    background-image: linear-gradient(to bottom right, map-get(variables.$colors, "bg"), map-get(variables.$colors, "bg-gradient-2") );
+    color: map-get(variables.$colors, "text");
+    width: 100%;
+    height: 100%;
+    gap: map-get(variables.$sizes, "space-1");
+    padding: map-get(variables.$sizes, "space-2");
+    overflow: hidden;
+}
+.icon-btn {
+      @include mixins.icon-btn();
+      @include mixins.icon-before();
+
+      --icon: none;
+    }
+
+.icon-btn--plus { --icon: url("../icons/plus.svg"); }
+.icon-btn--speed   { --icon: url("../icons/speed.svg"); }
+.icon-btn--chevron { --icon: url("../icons/chevron.svg"); }
+.icon-btn--chevron::before {
+                  transform: rotate(0deg);
+                  transition: transform .15s ease;
+                }
+.grid-12 {
+    display: grid;
+    grid-template-rows: repeat(12, 1fr);
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.grid-header {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: map-get(variables.$sizes, "space-1");
+
+    .config-add {
+      position: relative;
+    }
+    .popover {
+      
+      
+      position: absolute;
+      z-index: 1000;
+      translate: 20px -10px;
+
+
+      opacity: 0;
+      transform: translateY(-6px) scale(0.98);
+      visibility: hidden;
+      pointer-events: none;
+
+      transition: opacity 160ms ease, transform 160ms ease, visibility 0s linear 160ms;
+
+      
+    }
+
+    &.is-open .popover {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity 160ms ease, transform 160ms ease, visibility 0s;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popover__content {
+      @include mixins.glass-card;
+      padding: map-get(variables.$sizes, "space-3");
+      position: relative;
+      font-size: map-get(variables.$text, "regular-font-size");
+      button {
+        @include mixins.btn-base;
+        width: 100%;
+        margin-top: map-get(variables.$sizes, "space-2");
+        cursor: pointer;
+      }      
+    }
+}
+
+
+
+
+
+
+/*Главный блок*/
+.grid-main {
+    grid-column: 1/ -1;
+    grid-row: 2 / 12;
+
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: map-get(variables.$sizes, "space-2");
+    
+
+    .power-station {
+      position: relative;
+      margin-bottom: (map-get(variables.$sizes, "space-3"));
+      display: grid;
+      place-items: center;
+      
+      button.power-button {
+        @include mixins.icon-btn(map-get(variables.$sizes, "power_button_size"));
+        @include mixins.icon-before(map-get(variables.$sizes, "power_button_size"));
+        padding: 0;
+        --icon: url("../icons/power_button.svg");
+        z-index: 1;
+        transition: transform 160ms ease, filter 160ms ease;
+    } 
+    }
+
+
+    .power-station::before {
+      content: "";
+      position: absolute;
+      width: map-get(variables.$powerBt, "connecting");
+      height: map-get(variables.$powerBt, "connecting");
+      border-radius: 50%;
+      pointer-events: none;
+
+      background: radial-gradient(
+        circle at 50% 50%,
+        rgba(255,255,255,0.40),
+        rgba(255,255,255,0) 65%
+      );
+      opacity: 0;
+    }
+
+    .power-station::after {
+      content: "";
+      position: absolute;
+      width: map-get(variables.$powerBt, "connecting");
+      height: map-get(variables.$powerBt, "connecting");
+      border-radius: 50%;
+      pointer-events: none;
+
+      border: 2px solid rgba(255,255,255,0.12);
+      border-top-color: rgba(255,255,255,0.9);
+      border-right-color: rgba(255,255,255,0.35);
+
+      opacity: 0;
+      transform: rotate(0deg);
+    }
+
+    @keyframes spin {
+      to {transform: rotate(360deg);}
+    }
+
+    .power-station.is-connecting::after {
+      opacity: 1;
+      animation: spin 900ms linear infinite;
+    }
+
+    .power-station.is-connecting::before {
+      opacity: 0.7;
+    }
+
+    .power-station.pressed .power-button {
+      transform: translateY(2px) scale(0.985);
+      filter: brightness(0.95);
+    }
+    
+    .power-station.is-connected::after {
+      opacity: 0.35;
+      animation: none;
+      border-top-color: rgba(255,255,255,0.6);
+    }
+
+    .power-station.is-connected::before {
+      opacity: 1;
+      background: radial-gradient(
+        circle at 50% 50%,
+        rgba(255,255,255,0.5),
+        rgba(255,255,255,0) 70%
+      );
+    }
+}
+
+.install-deps {
+  width: map-get(variables.$sizes, "countries_size");
+  display: grid;
+  gap: map-get(variables.$sizes, "space-1");
+}
+
+.install-deps__button {
+  @include mixins.btn-base;
+  width: 100%;
+  font-size: map-get(variables.$text, "body-size");
+}
+
+.install-deps__status {
+  font-size: map-get(variables.$text, "small-size");
+  opacity: map-get(variables.$sizes, "opacity-muted");
+  text-align: center;
+}
+
+
+
+/*Карточка сервера (страны, название конфига, проверка скорости)*/
+.server-card {
+   transform: translateZ(0);
+   will-change: transform;
+   backface-visibility: hidden;
+   isolation: isolate;
+   contain: paint;
+
+   @include mixins.glass-card;
+   position: relative;
+   min-width: map-get(variables.$sizes, "countries_size");
+
+   
+          &.is-open .server-card-head{
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+          }
+          .server-card-head {
+            /*Хэддер карточки с кнопками и названием*/
+            border-top-left-radius: map-get(variables.$sizes, "radius-lg" );
+            border-top-right-radius: map-get(variables.$sizes, "radius-lg" );
+            border-bottom-left-radius: map-get(variables.$sizes, "radius-lg" );
+            border-bottom-right-radius: map-get(variables.$sizes, "radius-lg" );
+
+
+            background-color: map-get(variables.$colors, "bg-button");
+            padding: 0 map-get(variables.$sizes, "space-3" ) 0 0;
+            display: grid;
+            grid-template-columns: 36px 1fr 36px;  
+            align-items: center;
+            gap: map-get(variables.$sizes, "space-1");
+            transition: border-radius 220ms ease;
+          }
+                
+                &.is-open .icon-btn--chevron::before {
+                  transform: rotate(180deg);
+                }
+
+                .server-card__info {
+                padding-left: map-get(variables.$sizes, "space-2");
+                font-weight: map-get(variables.$text, "bold-font-weight");
+                line-height: map-get(variables.$text, "regular-line-height");
+                font-size: map-get(variables.$text, "title-size");
+              }
+
+              .server-card__subtitle {
+                opacity: map-get(variables.$sizes, "opacity-muted");
+                font-size: map-get(variables.$text, "small-size");
+                background: transparent;
+                border: 0;
+                color: inherit;
+                padding: 0;
+                margin: 0;
+                text-align: left;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                cursor: pointer;
+                width: fit-content;
+              }
+
+              .server-card__subtitle:disabled {
+                cursor: default;
+              }
+
+
+              
+        
+  
+      .server-card__dropdown {
+        display:grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 220ms ease;
+
+        padding: 0;
+      }
+      .server-card__dropdown-inner {
+        max-height: 0;
+        scrollbar-gutter: stable;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+
+        padding: map-get(variables.$sizes, "space-1");
+
+        opacity: 0;
+        transform: translateY(-8px);
+
+        transition: opacity 0ms linear, transform 0ms linear;
+      }
+      &.is-open .server-card__dropdown {
+          grid-template-rows: 1fr;
+      }
+      &.is-open .server-card__dropdown-inner {
+        transition: opacity 160ms ease 60ms, transform 160ms ease 60ms;
+        overflow-y: auto;
+        max-height: map-get(variables.$sizes, "countries_size");
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .server-card__dropdown-inner button {
+            @include mixins.btn-base;
+            margin: map-get(variables.$sizes, "space-1" );
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+          }
+      .server-card__dropdown-inner button.selected{
+            background-color: map-get(variables.$colors, "accent");
+          }
+}
+
+.latency-wave {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 18px;
+}
+
+.latency-value {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  justify-content: flex-end;
+}
+
+.latency-wave span {
+  display: inline-block;
+  animation: latency-wave-dot 900ms ease-in-out infinite;
+}
+
+.latency-wave span:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.latency-wave span:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+@keyframes latency-wave-dot {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+}
+
+
+
+/*Футер*/
+.grid-footer {
+    grid-column: 1 / -1;
+    grid-row: 12 / 13;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

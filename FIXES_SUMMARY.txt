@@ -1,0 +1,68 @@
+BlancVPN Steam Deck: applied fixes summary
+
+Repository code changes
+
+1. Updated installer logic in:
+   source/build/steamdeck/install.sh
+
+   What changed:
+   - Installer no longer relies on HOME alone.
+   - It now resolves the target desktop user from SUDO_USER when available.
+   - If the script is launched from a root shell on Steam Deck, it falls back to user "deck" when /home/deck exists.
+   - Install paths are now built from the resolved target user's home:
+     - ~/.local/share/blancvpn
+     - ~/.local/bin/blancvpn
+     - ~/.local/share/applications/blancvpn.desktop
+     - Desktop shortcut path
+   - Desktop directory resolution now attempts xdg-user-dir for the target user instead of the current root environment.
+
+2. Updated uninstall logic in:
+   source/build/steamdeck/uninstall.sh
+
+   What changed:
+   - Uninstall now removes files from the resolved target user's home instead of blindly using HOME.
+   - Added the same target-user resolution logic as in install.sh.
+   - update-desktop-database now runs against the resolved user's applications directory.
+
+3. Verified shell syntax:
+   - bash -n source/build/steamdeck/install.sh
+   - bash -n source/build/steamdeck/uninstall.sh
+
+
+Installed system changes outside repository
+
+These were not source-code changes in the repo. These were changes to the currently installed copy under /home/deck:
+
+1. Recreated desktop launcher files for user deck:
+   - /home/deck/.local/share/applications/blancvpn.desktop
+   - /home/deck/Desktop/BlancVPN.desktop
+
+2. Recreated launcher script:
+   - /home/deck/.local/bin/blancvpn
+
+3. Copied installed application payload into:
+   - /home/deck/.local/share/blancvpn
+
+Important note
+
+- The packaged files under source/build/dist/steamdeck/BlancVPN-SteamDeck were not updated in-place from this session because that directory is owned by nobody and was not writable here.
+- However, the package generation script copies install.sh and uninstall.sh from source/build/steamdeck, so newly generated packages should inherit the fixed installer logic.
+
+
+Answer to the direct question
+
+Yes, I changed repository code.
+
+Changed in code:
+- source/build/steamdeck/install.sh
+- source/build/steamdeck/uninstall.sh
+
+Also changed outside the repo in the installed user copy:
+- /home/deck/.local/bin/blancvpn
+- /home/deck/.local/share/applications/blancvpn.desktop
+- /home/deck/Desktop/BlancVPN.desktop
+- /home/deck/.local/share/blancvpn
+
+I did not rebuild the application binary from source in this session.
+I did not change the Go or frontend application code itself.
+The main code changes were in the Steam Deck install/uninstall scripts.

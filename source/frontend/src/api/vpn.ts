@@ -1,7 +1,12 @@
 
 import {
+    Connect as ConnectBinding,
+    Disconnect as DisconnectBinding,
+    GetDependencyStatus as GetDependencyStatusBinding,
+    GetConnectionStatus as GetConnectionStatusBinding,
     GetVpnBootstrap as GetVpnBootstrapBinding,
     ImportConfig as ImportConfigBinding,
+    InstallDependencies as InstallDependenciesBinding,
     MeasureAllServerLatencies as MeasureAllServerLatenciesBinding,
     MeasureSelectedServerLatency as MeasureSelectedServerLatencyBinding,
     SaveSelectedServer as SaveSelectedServerBinding,
@@ -18,12 +23,20 @@ export type ServerOption = {
 
 export type VpnStatus = "idle" | "connecting" | "connected" | "disconnecting" |"error";
 
-
+export type DependencyStatus = {
+    ready: boolean;
+    xray: boolean;
+    tun2socks: boolean;
+    xrayConfigDir: boolean;
+    v2rayConfigDir: boolean;
+    message: string;
+};
 
 export type VpnBootstrapData = {
     servers: ServerOption[];
     selectedUrl: string | null;
     providerName: string;
+    dependenciesInstalled: boolean;
 }
 
 export type LatencyUpdateEvent = {
@@ -48,11 +61,43 @@ export async function getVpnBootstrap(): Promise<VpnBootstrapData> {
         servers: data.servers,
         selectedUrl: data.selectedUrl || null,
         providerName: data.providerName,
+        dependenciesInstalled: Boolean(data.dependenciesInstalled),
     };
+}
+
+export async function getDependencyStatus(): Promise<DependencyStatus> {
+    const data = await GetDependencyStatusBinding();
+
+    return {
+        ready: Boolean(data.ready),
+        xray: Boolean(data.xray),
+        tun2socks: Boolean(data.tun2socks),
+        xrayConfigDir: Boolean(data.xrayConfigDir),
+        v2rayConfigDir: Boolean(data.v2rayConfigDir),
+        message: data.message || "",
+    };
+}
+
+export async function getConnectionStatus(): Promise<VpnStatus> {
+    const status = String(await GetConnectionStatusBinding());
+
+    switch (status) {
+        case "connected":
+        case "connecting":
+        case "disconnecting":
+        case "error":
+            return status;
+        default:
+            return "idle";
+    }
 }
 
 export async function saveSelectedServer(url: string): Promise<void> {
     await SaveSelectedServerBinding(url);
+}
+
+export async function installDependencies(): Promise<string> {
+    return InstallDependenciesBinding();
 }
 
 export async function importConfig(link: string): Promise<VpnBootstrapData> {
@@ -62,6 +107,7 @@ export async function importConfig(link: string): Promise<VpnBootstrapData> {
         servers: data.servers,
         selectedUrl: data.selectedUrl || null,
         providerName: data.providerName,
+        dependenciesInstalled: Boolean(data.dependenciesInstalled),
     };
 }
 
@@ -72,6 +118,7 @@ export async function measureAllServerLatencies(): Promise<VpnBootstrapData> {
         servers: data.servers,
         selectedUrl: data.selectedUrl || null,
         providerName: data.providerName,
+        dependenciesInstalled: Boolean(data.dependenciesInstalled),
     };
 }
 
@@ -82,6 +129,7 @@ export async function measureSelectedServerLatency(url: string): Promise<VpnBoot
         servers: data.servers,
         selectedUrl: data.selectedUrl || null,
         providerName: data.providerName,
+        dependenciesInstalled: Boolean(data.dependenciesInstalled),
     };
 }
 
@@ -103,23 +151,24 @@ export async function connect(url: string): Promise<void> {
     if (currentStatus === "connecting" || currentStatus === "connected") return;
 
     emit("connecting");
-
-    await new Promise((r) => setTimeout(r, 2500));
-
-    /*const fail = Math.random() < 0.2;
-    emit(fail ? "error" : "connected");*/
-
-    emit("connected");
-
-    
+    try {
+        await ConnectBinding(url);
+        emit(await getConnectionStatus());
+    } catch (error) {
+        emit("error");
+        throw error;
+    }
 }
 
 export async function disconnect(): Promise<void> {
     if(currentStatus === "connecting" || currentStatus === "idle") return;
 
-    emit("disconnecting")
-
-    await new Promise((r) => setTimeout(r, 500));
-
-    emit("idle");
+    emit("disconnecting");
+    try {
+        await DisconnectBinding();
+        emit(await getConnectionStatus());
+    } catch (error) {
+        emit("error");
+        throw error;
+    }
 }

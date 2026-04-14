@@ -1,0 +1,86 @@
+BlancVPN Steam Deck: run and recovery instructions
+
+Normal launch
+
+1. Switch to Desktop Mode.
+2. Start BlancVPN from one of these:
+   - Desktop shortcut: /home/deck/Desktop/BlancVPN.desktop
+   - App launcher entry: /home/deck/.local/share/applications/blancvpn.desktop
+   - Terminal: /home/deck/.local/bin/blancvpn
+
+
+If the app opens and then closes immediately
+
+Run it from Konsole to capture the real error:
+
+  /home/deck/.local/bin/blancvpn 2>&1 | tee /tmp/blancvpn.log
+
+Then inspect:
+
+  cat /tmp/blancvpn.log
+
+
+If the desktop shortcut is present but does not launch
+
+Check the launcher script:
+
+  sed -n '1,20p' /home/deck/.local/bin/blancvpn
+
+Expected content:
+
+  #!/usr/bin/env bash
+  set -euo pipefail
+  exec "/home/deck/.local/share/blancvpn/vless-ui" "$@"
+
+Check desktop entry:
+
+  sed -n '1,40p' /home/deck/.local/share/applications/blancvpn.desktop
+
+Expected key lines:
+
+  Exec=/home/deck/.local/bin/blancvpn
+  Icon=/home/deck/.local/share/blancvpn/appicon.png
+
+
+If the app was installed into /root by mistake
+
+This happens when install.sh is run from a root context and paths are derived from HOME.
+The repository installer has now been fixed, but an already broken install may still need manual repair.
+
+Manual repair from root shell:
+
+  install -d -m 755 /home/deck/.local/share/blancvpn /home/deck/.local/bin /home/deck/.local/share/applications /home/deck/Desktop
+  cp -a /root/.local/share/blancvpn/. /home/deck/.local/share/blancvpn/
+  cat > /home/deck/.local/bin/blancvpn <<'EOF'
+  #!/usr/bin/env bash
+  set -euo pipefail
+  exec "/home/deck/.local/share/blancvpn/vless-ui" "$@"
+  EOF
+  chmod 755 /home/deck/.local/bin/blancvpn
+  sed \
+    -e 's|^Exec=.*|Exec=/home/deck/.local/bin/blancvpn|' \
+    -e 's|^Icon=.*|Icon=/home/deck/.local/share/blancvpn/appicon.png|' \
+    /root/.local/share/applications/blancvpn.desktop > /home/deck/.local/share/applications/blancvpn.desktop
+  cp /home/deck/.local/share/applications/blancvpn.desktop /home/deck/Desktop/BlancVPN.desktop
+  chmod 755 /home/deck/Desktop/BlancVPN.desktop
+  chown -R deck:deck /home/deck/.local/share/blancvpn /home/deck/.local/bin /home/deck/.local/share/applications /home/deck/Desktop/BlancVPN.desktop
+
+
+If you want to build a new corrected package
+
+The source-of-truth scripts are:
+  source/build/steamdeck/install.sh
+  source/build/steamdeck/uninstall.sh
+
+Package creation script:
+  source/build/steamdeck/package-steamdeck.sh
+
+That script copies install.sh and uninstall.sh from source/build/steamdeck into build/dist,
+so a newly built package should contain the corrected installer logic.
+
+
+Current state summary
+
+- Installer/uninstaller source scripts were fixed.
+- Installed user-level launcher files were adjusted manually.
+- The application binary itself was not rebuilt from source during this session.

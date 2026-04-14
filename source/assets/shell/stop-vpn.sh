@@ -18,9 +18,9 @@ echo "[3] Завершение процессов..."
 if [ -f /tmp/tun2socks.pid ]; then
   kill "$(cat /tmp/tun2socks.pid)" 2>/dev/null || true
 fi
-if [ -f /tmp/v2ray.pid ]; then
-  kill "$(cat /tmp/v2ray.pid)" 2>/dev/null || true
+if [ -f /tmp/xray.pid ]; then
+  kill "$(cat /tmp/xray.pid)" 2>/dev/null || true
 fi
-rm -f /tmp/v2ray.pid /tmp/tun2socks.pid
+rm -f /tmp/xray.pid /tmp/tun2socks.pid
 
 echo "❎ VPN остановлен"
