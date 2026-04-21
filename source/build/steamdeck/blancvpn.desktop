@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
 Version=1.0
-Name=BlancVPN
-Comment=BlancVPN client for Steam Deck
+Name=FF Vless
+Comment=VLESS client for Steam Deck
 Exec=__BLANCVPN_EXEC__
 Icon=__BLANCVPN_ICON__
 Terminal=false

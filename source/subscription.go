@@ -13,22 +13,7 @@ import (
 )
 
 func getDefaultServers() []ServerOption {
-	return []ServerOption{
-		{
-			ID:        "nl-1",
-			Label:     "🇳🇱 Netherlands, Amsterdam",
-			URL:       "vless://example-nl",
-			Host:      "nl.example.com",
-			LatencyMs: 0,
-		},
-		{
-			ID:        "jp-1",
-			Label:     "🇯🇵 Japan, Tokyo",
-			URL:       "vless://example-jp",
-			Host:      "jp.example.com",
-			LatencyMs: 0,
-		},
-	}
+	return []ServerOption{}
 }
 
 func getConfiguredServers(settings AppSettings) []ServerOption {

@@ -1,8 +1,8 @@
 package main
 
 const (
-	appUserAgent      = "Mozilla/5.0 (Steam Deck; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) BlancVPN/0.1"
-	probeUserAgent    = "BlancVPN-LatencyProbe/0.1"
+	appUserAgent      = "Mozilla/5.0 (Steam Deck; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) FFVless/0.1"
+	probeUserAgent    = "FFVless-LatencyProbe/0.1"
 	latencyProbeURL   = "https://cp.cloudflare.com/generate_204"
 	defaultProvider   = "Name of Connection"
 	runtimeSocksPort  = 1080

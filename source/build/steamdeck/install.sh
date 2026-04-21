@@ -3,7 +3,7 @@
 set -euo pipefail
 
 PACKAGE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-APP_BINARY_NAME="vless-ui"
+APP_BINARY_NAME="ff-vless"
 
 resolve_target_user() {
   if [[ -n "${SUDO_USER:-}" && "${SUDO_USER}" != "root" ]]; then
@@ -56,6 +56,20 @@ resolve_desktop_dir() {
   echo "${target_home}/Desktop"
 }
 
+run_as_target_user() {
+  if [[ "$(id -un)" == "${TARGET_USER}" ]]; then
+    HOME="${TARGET_HOME}" "$@"
+    return
+  fi
+
+  if command -v sudo >/dev/null 2>&1; then
+    sudo -H -u "${TARGET_USER}" "$@"
+    return
+  fi
+
+  HOME="${TARGET_HOME}" "$@"
+}
+
 TARGET_USER="$(resolve_target_user)"
 TARGET_HOME="$(resolve_target_home "${TARGET_USER}")"
 INSTALL_ROOT="${TARGET_HOME}/.local/share/blancvpn"
@@ -69,7 +83,7 @@ ICON_TARGET="${INSTALL_ROOT}/appicon.png"
 DESKTOP_TEMPLATE="${PACKAGE_DIR}/blancvpn.desktop"
 DESKTOP_TARGET="${APPLICATIONS_DIR}/blancvpn.desktop"
 DESKTOP_DIR="$(resolve_desktop_dir "${TARGET_USER}" "${TARGET_HOME}")"
-DESKTOP_SHORTCUT="${DESKTOP_DIR}/BlancVPN.desktop"
+DESKTOP_SHORTCUT="${DESKTOP_DIR}/FF Vless.desktop"
 
 if [[ ! -f "${APP_BINARY_SOURCE}" ]]; then
   echo "Missing app binary: ${APP_BINARY_SOURCE}"
@@ -79,7 +93,7 @@ fi
 
 if [[ -z "${DESKTOP_DIR}" ]]; then
   DESKTOP_DIR="${TARGET_HOME}/Desktop"
-  DESKTOP_SHORTCUT="${DESKTOP_DIR}/BlancVPN.desktop"
+  DESKTOP_SHORTCUT="${DESKTOP_DIR}/FF Vless.desktop"
 fi
 
 mkdir -p "${INSTALL_ROOT}" "${BIN_DIR}" "${APPLICATIONS_DIR}"
@@ -115,11 +129,11 @@ if command -v update-desktop-database >/dev/null 2>&1; then
 fi
 
 echo "Installing runtime dependencies..."
-bash "${INSTALL_ROOT}/assets/shell/xrayDownload.sh"
-bash "${INSTALL_ROOT}/assets/shell/tun2SocksDownload.sh"
+run_as_target_user bash "${INSTALL_ROOT}/assets/shell/xrayDownload.sh"
+run_as_target_user bash "${INSTALL_ROOT}/assets/shell/tun2SocksDownload.sh"
 
 echo
-echo "BlancVPN installed."
+echo "FF Vless installed."
 echo "Launcher: ${LAUNCHER_PATH}"
 echo "Desktop entry: ${DESKTOP_TARGET}"
 echo "Desktop shortcut: ${DESKTOP_SHORTCUT}"

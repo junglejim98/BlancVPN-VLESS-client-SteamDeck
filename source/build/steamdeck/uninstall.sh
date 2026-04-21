@@ -59,15 +59,17 @@ INSTALL_ROOT="${TARGET_HOME}/.local/share/blancvpn"
 LAUNCHER_PATH="${TARGET_HOME}/.local/bin/blancvpn"
 DESKTOP_TARGET="${TARGET_HOME}/.local/share/applications/blancvpn.desktop"
 DESKTOP_DIR="$(resolve_desktop_dir "${TARGET_USER}" "${TARGET_HOME}")"
-DESKTOP_SHORTCUT="${DESKTOP_DIR}/BlancVPN.desktop"
+DESKTOP_SHORTCUT="${DESKTOP_DIR}/FF Vless.desktop"
+LEGACY_DESKTOP_SHORTCUT="${DESKTOP_DIR}/BlancVPN.desktop"
 
 rm -f "${LAUNCHER_PATH}"
 rm -f "${DESKTOP_TARGET}"
 rm -f "${DESKTOP_SHORTCUT}"
+rm -f "${LEGACY_DESKTOP_SHORTCUT}"
 rm -rf "${INSTALL_ROOT}"
 
 if command -v update-desktop-database >/dev/null 2>&1; then
   update-desktop-database "${TARGET_HOME}/.local/share/applications" >/dev/null 2>&1 || true
 fi
 
-echo "BlancVPN uninstalled from user-space paths."
+echo "FF Vless uninstalled from user-space paths."

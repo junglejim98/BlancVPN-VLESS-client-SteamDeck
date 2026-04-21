@@ -17,7 +17,7 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:         "vless-ui",
+		Title:         "FF Vless",
 		Width:         400,
 		Height:        660,
 		MinWidth:      400,

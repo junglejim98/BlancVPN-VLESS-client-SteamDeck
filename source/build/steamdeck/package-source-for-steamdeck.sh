@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 DIST_ROOT="${PROJECT_ROOT}/build/dist/steamdeck"
-PACKAGE_NAME="BlancVPN-SteamDeck-source"
+PACKAGE_NAME="FF-Vless-SteamDeck-source"
 PACKAGE_ROOT="${DIST_ROOT}/${PACKAGE_NAME}"
 ARCHIVE_PATH="${DIST_ROOT}/${PACKAGE_NAME}.tar.gz"
 
@@ -16,16 +16,18 @@ rsync -a \
   --exclude 'frontend/node_modules' \
   --exclude 'frontend/dist' \
   --exclude 'build/bin' \
+  --exclude 'build/dist' \
   --exclude '.git' \
   "${PROJECT_ROOT}/" "${PACKAGE_ROOT}/source/"
 
 cp "${SCRIPT_DIR}/build-on-steamdeck.sh" "${PACKAGE_ROOT}/build-on-steamdeck.sh"
 cp "${SCRIPT_DIR}/bootstrap-steamdeck.sh" "${PACKAGE_ROOT}/bootstrap-steamdeck.sh"
 cp "${SCRIPT_DIR}/install-toolchain-steamdeck.sh" "${PACKAGE_ROOT}/install-toolchain-steamdeck.sh"
+mkdir -p "${PACKAGE_ROOT}/source/build/tools"
 chmod +x "${PACKAGE_ROOT}/build-on-steamdeck.sh" "${PACKAGE_ROOT}/bootstrap-steamdeck.sh" "${PACKAGE_ROOT}/install-toolchain-steamdeck.sh"
 
 cat > "${PACKAGE_ROOT}/README.txt" <<'EOF'
-BlancVPN Steam Deck source package
+FF Vless Steam Deck source package
 
 Usage on Steam Deck:
 1. Extract this archive.
@@ -36,7 +38,7 @@ Usage on Steam Deck:
 Lower-level manual flow is still available:
 - ./install-toolchain-steamdeck.sh
 - ./build-on-steamdeck.sh
-- then run install.sh from source/build/dist/steamdeck/BlancVPN-SteamDeck
+- then run install.sh from source/build/dist/steamdeck/FF-Vless-SteamDeck
 
 Requirements on Steam Deck:
 - Go
@@ -55,6 +57,11 @@ bootstrap-steamdeck.sh installs:
 
 The Wails build is executed with:
 -tags webkit2_41
+
+AppImage:
+- put appimagetool at source/build/tools/appimagetool-x86_64.AppImage
+- or install appimagetool into PATH
+- then run ./build-on-steamdeck.sh
 EOF
 
 mkdir -p "${DIST_ROOT}"

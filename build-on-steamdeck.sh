@@ -50,4 +50,4 @@ fi
 echo
 echo "Done. Package locations:"
 echo "  ${PROJECT_ROOT}/build/dist/steamdeck/FF-Vless-SteamDeck.tar.gz"
-echo "  ${PROJECT_ROOT}/build/dist/steamdeck/FF-Vless-Installer-x86_64.AppImage"
+echo "  ${PROJECT_ROOT}/build/dist/steamdeck/FF-Vless-x86_64.AppImage"

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Remove Old BlancVPN
+Comment=Remove the old BlancVPN install before installing FF Vless
+Exec=sh -c "p=\"${1#file://}\"; d=\"$(dirname \"$p\")\"; exec \"$d/uninstall-old-blancvpn.sh\"" sh %k
+Icon=edit-delete
+Terminal=true
+Categories=Utility;Network;
+StartupNotify=true

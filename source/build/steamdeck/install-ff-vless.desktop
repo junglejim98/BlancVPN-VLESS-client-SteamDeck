@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Install FF Vless
+Comment=Install FF Vless and create the desktop launcher
+Exec=sh -c "p=\"${1#file://}\"; d=\"$(dirname \"$p\")\"; exec \"$d/install-ff-vless.sh\"" sh %k
+Icon=system-software-install
+Terminal=true
+Categories=Utility;Network;
+StartupNotify=true

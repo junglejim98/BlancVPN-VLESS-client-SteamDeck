@@ -1,9 +1,57 @@
-source/frontend/node_modules
-source/frontend/dist
-build/bin
-node_modules
+# OS/editor noise
+.DS_Store
+._*
+*~
+.vscode/
+
+# Logs, env, and runtime state
+*.log
+*.pid
+.env
+.env.*
+!.env.example
+*.local
+*.key
+*.pem
+*.crt
+*.p12
+*.mobileprovision
+
+# Local VPN/user data
+config.json
+settings.json
+subscriptions*.txt
+subscriptions*.json
+*subscription-url*
+*vless*.txt
+*vmess*.txt
+*trojan*.txt
+xray.json
+
+# Dependencies and frontend output
+node_modules/
+source/frontend/node_modules/
+source/frontend/dist/
+source/frontend/package.json.md5
+
+# Go/Wails build artifacts
+source/build/bin/
+source/build/dist/
+source/build/AppDir/
+source/vless-ui
+build/bin/
+build/dist/
+build/AppDir/
+vless-ui
+
+# Packaging output
+source/build/tools/*.AppImage
+*.AppImage
+*.tar.gz
 BlancVPN-SteamDeck-source-fixed.tar.gz
 BlancVPN-SteamDeck-transfer.tar.gz
 BlancVPN-SteamDeck.tar.gz
+
+# Local notes/instructions generated during packaging
 FIXES_SUMMARY.txt
 RUN_INSTRUCTIONS.txt
