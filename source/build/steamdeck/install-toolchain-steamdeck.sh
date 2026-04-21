@@ -33,7 +33,7 @@ sudo pacman -Sy --needed --noconfirm \
   linux-api-headers \
   make \
   gtk3 \
-  webkit2gtk \
+  webkit2gtk-4.1 \
   pkgconf \
   wget \
   unzip \

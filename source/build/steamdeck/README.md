@@ -33,6 +33,13 @@ The installer performs a user-space install:
 - desktop entry: `~/.local/share/applications/blancvpn.desktop`
 
 The included installer can also install `xray` and `tun2socks` into the user's home directory by running the bundled shell scripts.
+It also checks required runtime packages (`wget`, `unzip`, `webkit2gtk-4.1`) and installs missing packages through SteamOS/Arch tooling when possible.
+
+Go, Node.js and npm are build-time dependencies, not runtime dependencies for the packaged installer. They are bundled as an optional helper script for source builds:
+
+```bash
+FF_VLESS_INSTALL_BUILD_TOOLCHAIN=1 ./install.sh
+```
 
 Desktop Mode install without typing commands:
 

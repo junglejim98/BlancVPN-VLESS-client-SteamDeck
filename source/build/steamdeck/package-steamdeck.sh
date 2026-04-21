@@ -36,6 +36,7 @@ cp "${ICON_SOURCE}" "${PACKAGE_ROOT}/assets/appicon.png"
 cp "${SCRIPT_DIR}/install.sh" "${PACKAGE_ROOT}/install.sh"
 cp "${SCRIPT_DIR}/install-ff-vless.sh" "${PACKAGE_ROOT}/install-ff-vless.sh"
 cp "${SCRIPT_DIR}/install-ff-vless.desktop" "${PACKAGE_ROOT}/install-ff-vless.desktop"
+cp "${SCRIPT_DIR}/install-toolchain-steamdeck.sh" "${PACKAGE_ROOT}/install-toolchain-steamdeck.sh"
 cp "${SCRIPT_DIR}/uninstall.sh" "${PACKAGE_ROOT}/uninstall.sh"
 cp "${SCRIPT_DIR}/uninstall-old-blancvpn.sh" "${PACKAGE_ROOT}/uninstall-old-blancvpn.sh"
 cp "${SCRIPT_DIR}/uninstall-old-blancvpn.desktop" "${PACKAGE_ROOT}/uninstall-old-blancvpn.desktop"
@@ -46,6 +47,7 @@ chmod +x \
   "${PACKAGE_ROOT}/install.sh" \
   "${PACKAGE_ROOT}/install-ff-vless.sh" \
   "${PACKAGE_ROOT}/install-ff-vless.desktop" \
+  "${PACKAGE_ROOT}/install-toolchain-steamdeck.sh" \
   "${PACKAGE_ROOT}/uninstall.sh" \
   "${PACKAGE_ROOT}/uninstall-old-blancvpn.sh" \
   "${PACKAGE_ROOT}/uninstall-old-blancvpn.desktop"

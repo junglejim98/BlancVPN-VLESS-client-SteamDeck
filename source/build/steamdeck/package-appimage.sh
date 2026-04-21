@@ -50,10 +50,13 @@ find "${APPDIR}/assets/shell" -type f -name '._*' -delete
 find "${APPDIR}/assets/shell" -type f -name '*.sh' -exec chmod +x {} \;
 
 cp "${PROJECT_ROOT}/build/appicon.png" "${APPDIR}/ff-vless.png"
+cp "${PROJECT_ROOT}/build/appicon.png" "${APPDIR}/ff-vless-installer.png"
 cp "${PROJECT_ROOT}/build/appicon.png" "${APPDIR}/usr/share/icons/hicolor/256x256/apps/ff-vless.png"
+cp "${PROJECT_ROOT}/build/appicon.png" "${APPDIR}/usr/share/icons/hicolor/256x256/apps/ff-vless-installer.png"
 cp "${PROJECT_ROOT}/build/appicon.png" "${APPDIR}/assets/appicon.png"
 cp "${SCRIPT_DIR}/install.sh" "${APPDIR}/install.sh"
 cp "${SCRIPT_DIR}/install-ff-vless.sh" "${APPDIR}/install-ff-vless.sh"
+cp "${SCRIPT_DIR}/install-toolchain-steamdeck.sh" "${APPDIR}/install-toolchain-steamdeck.sh"
 cp "${SCRIPT_DIR}/uninstall.sh" "${APPDIR}/uninstall.sh"
 cp "${SCRIPT_DIR}/uninstall-old-blancvpn.sh" "${APPDIR}/uninstall-old-blancvpn.sh"
 cp "${SCRIPT_DIR}/blancvpn.desktop" "${APPDIR}/blancvpn.template.desktop"
@@ -61,6 +64,7 @@ cp "${SCRIPT_DIR}/README.md" "${APPDIR}/README.txt"
 chmod +x \
   "${APPDIR}/install.sh" \
   "${APPDIR}/install-ff-vless.sh" \
+  "${APPDIR}/install-toolchain-steamdeck.sh" \
   "${APPDIR}/uninstall.sh" \
   "${APPDIR}/uninstall-old-blancvpn.sh"
 
@@ -71,7 +75,7 @@ Version=1.0
 Name=Install FF Vless
 Comment=Install FF Vless and create the desktop launcher
 Exec=AppRun
-Icon=ff-vless
+Icon=ff-vless-installer
 Terminal=false
 Categories=Utility;Network;
 StartupNotify=true
