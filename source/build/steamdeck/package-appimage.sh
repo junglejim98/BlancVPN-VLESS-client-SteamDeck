@@ -59,7 +59,7 @@ cp "${SCRIPT_DIR}/install-ff-vless.sh" "${APPDIR}/install-ff-vless.sh"
 cp "${SCRIPT_DIR}/install-toolchain-steamdeck.sh" "${APPDIR}/install-toolchain-steamdeck.sh"
 cp "${SCRIPT_DIR}/uninstall.sh" "${APPDIR}/uninstall.sh"
 cp "${SCRIPT_DIR}/uninstall-old-blancvpn.sh" "${APPDIR}/uninstall-old-blancvpn.sh"
-cp "${SCRIPT_DIR}/blancvpn.desktop" "${APPDIR}/blancvpn.template.desktop"
+cp "${SCRIPT_DIR}/blancvpn.desktop" "${APPDIR}/blancvpn.desktop.template"
 cp "${SCRIPT_DIR}/README.md" "${APPDIR}/README.txt"
 chmod +x \
   "${APPDIR}/install.sh" \

@@ -207,6 +207,12 @@ LAUNCHER_PATH="${BIN_DIR}/blancvpn"
 ICON_SOURCE="${PACKAGE_DIR}/assets/appicon.png"
 ICON_TARGET="${INSTALL_ROOT}/appicon.png"
 DESKTOP_TEMPLATE="${PACKAGE_DIR}/blancvpn.desktop"
+if [[ ! -f "${DESKTOP_TEMPLATE}" && -f "${PACKAGE_DIR}/blancvpn.desktop.template" ]]; then
+  DESKTOP_TEMPLATE="${PACKAGE_DIR}/blancvpn.desktop.template"
+fi
+if [[ ! -f "${DESKTOP_TEMPLATE}" && -f "${PACKAGE_DIR}/blancvpn.template.desktop" ]]; then
+  DESKTOP_TEMPLATE="${PACKAGE_DIR}/blancvpn.template.desktop"
+fi
 DESKTOP_TARGET="${APPLICATIONS_DIR}/blancvpn.desktop"
 DESKTOP_DIR="$(resolve_desktop_dir "${TARGET_USER}" "${TARGET_HOME}")"
 DESKTOP_SHORTCUT="${DESKTOP_DIR}/FF Vless.desktop"
